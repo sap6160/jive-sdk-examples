@@ -3,7 +3,7 @@
     "appName": "mdw-client-app",
     "appDescription": "MarksApp",
     "userEmail": "aron@apps-devint019.jiveland.com",
-    "userPassword": "admin",
+    "userPassword": "yourpasswordhere",
     "callbackURL": "http://www.yahoo.com",
     "filePersistenceRootDir" : "."
 }
