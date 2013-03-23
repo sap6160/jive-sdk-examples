@@ -2,8 +2,8 @@
     "port": "8090",
     "appName": "mdw-client-app",
     "appDescription": "MarksApp",
-    "userEmail": "aron@apps-devint019.jiveland.com",
-    "userPassword": "yourpasswordhere",
+    "userEmail": "YourUser ID Here",
+    "userPassword": "Your Password Here",
     "callbackURL": "http://www.yahoo.com",
     "filePersistenceRootDir" : "."
 }
