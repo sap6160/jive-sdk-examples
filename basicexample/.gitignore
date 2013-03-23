@@ -1,0 +1,5 @@
+node_modules/
+db/
+*.iml
+.idea/
+DS_Store

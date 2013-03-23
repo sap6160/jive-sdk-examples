@@ -1,0 +1,19 @@
+{
+    "published" : "2013-02-28T15:12:16.768-0800",
+    "updated" : "2013-02-28T15:12:16.768-0800",
+    "action" : "{{{tile_route}}}/action",
+    "config" : "{{{tile_route}}}/configure",
+    "register" : "{{{host}}}/registration",
+    "client_id" : "{{{clientId}}}",
+    "sampleData" : {},
+    "displayName" : "Email",
+    "id" : "{{{tile_id}}}",
+    "name" : "email",
+    "description" : "Email",
+    "style" : "ACTIVITY",
+    "icons" : {
+        "16" : "http://www.emailmeform.com/builder/images/mail-pic.png",
+        "48" : "http://www.emailmeform.com/builder/images/mail-pic.png",
+        "128" : "http://www.emailmeform.com/builder/images/mail-pic.png"
+    }
+}

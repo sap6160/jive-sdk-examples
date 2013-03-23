@@ -1,0 +1,77 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{{host}}}/stylesheets/style.css">
+    <script>
+        var host = '{{{host}}}';
+    </script>
+    <script src="{{{host}}}/tiles/email/javascripts/main.js"></script>
+</head>
+
+<body>
+
+<div id="j-card-configured" class="j-card hidden">
+    <h2>Authentication</h2>
+
+    <p>
+        Username: <span class="j-configuredfield" id="val_username"></span>
+    </p>
+
+    <p>
+        Password: <span class="j-configuredfield">*********</span>
+    </p>
+
+    <p>
+        POP3 Host: <span class="j-configuredfield" id="val_pop3host"></span>
+    </p>
+
+    <p>
+        POP3 Port: <span class="j-configuredfield" id="val_pop3port"></span>
+    </p>
+
+    <p>
+        Use TLS: <span class="j-configuredfield" id="val_pop3tls"></span>
+    </p>
+
+    <button id="btn_change">Change</button>
+
+</div>
+
+<div id="j-card-configure" class="j-card hidden">
+    <h2>Email Configuration</h2>
+
+    <p>
+        Username
+        <br>
+        <input type="text" id="txt_username" class="j-authfield">
+    </p>
+
+    <p>
+        Password
+        <br>
+        <input type="password" id="txt_password" class="j-authfield">
+    </p>
+
+    <p>
+        POP3 Host
+        <br>
+        <input type="text" id="txt_pop3host" class="j-authfield">
+    </p>
+
+    <p>
+        POP3 Port
+        <br>
+        <input type="text" id="txt_pop3port" class="j-authfield">
+    </p>
+
+    <p>
+        POP3 TLS
+        <br>
+        <input type="text" id="txt_pop3tls" class="j-authfield">
+    </p>
+
+    <button id="btn_configure">Submit</button>
+
+</div>
+
+</body>
+</html>

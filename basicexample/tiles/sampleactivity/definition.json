@@ -1,0 +1,35 @@
+{
+    "published" : "2013-02-28T15:12:16.768-0800",
+    "updated" : "2013-02-28T15:12:16.768-0800",
+    "action" : "{{{tile_route}}}/action",
+    "config" : "{{{tile_route}}}/configure",
+    "register" : "{{{host}}}/registration",
+    "client_id" : "{{{clientId}}}",
+    "sampleData" : {
+        "action" : {
+            "name" : "Updated",
+            "description" : "Updated opportunity"
+        },
+        "actor" : {
+            "name" : "Actor Name",
+            "email" : "actor@email.com"
+        },
+        "object" : {
+            "type" : "website",
+            "url" : "http://www.google.com",
+            "image" : "https://www.google.com/images/srpr/logo3w.png",
+            "title" : "Google Deal",
+            "description" : "Google's main website"
+        }
+    },
+    "displayName" : "Opportunity Activity",
+    "id" : "{{{tile_id}}}",
+    "name" : "sampleactivity",
+    "description" : "Dealroom activity.",
+    "style" : "ACTIVITY",
+    "icons" : {
+        "16" : "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif",
+        "48" : "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif",
+        "128" : "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif"
+    }
+}
