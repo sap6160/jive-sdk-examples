@@ -1,12 +1,11 @@
 {
     "published" : "2013-02-28T15:12:16.768-0800",
     "updated" : "2013-02-28T15:12:16.768-0800",
-    "action" : "{{{tile_route}}}/action",
     "config" : "{{{tile_route}}}/configure",
     "register" : "{{{host}}}/registration",
     "client_id" : "{{{clientId}}}",
     "sampleData" : {
-        "title" : "Jive Software Details",
+        "title" : "SFDC Example",
         "contents" : [ {
             "text" : "Size: $100,000",
             "icon" : "http://cdn1.iconfinder.com/data/icons/free-business-desktop-icons/128/Calculator.png",
@@ -14,13 +13,11 @@
         }, {
             "text" : "Start Date: 1/5/2013",
             "icon" : "http://cdn1.iconfinder.com/data/icons/free-business-desktop-icons/128/Calculator.png",
-            "linkDescription" : "Date when this account was opened.",
-            "action" : { "context": { "test" : "data" } }
+            "linkDescription" : "Date when this account was opened."
         }, {
             "text" : "Territory: Alaska",
             "icon" : "http://cdn1.iconfinder.com/data/icons/free-business-desktop-icons/128/Calculator.png",
-            "linkDescription" : "Area affected by this account.",
-            "action" : { "context": { "test" : "data" } }
+            "linkDescription" : "Area affected by this account."
         } ],
         "config" : {
                "listStyle" : "contentList"
@@ -30,10 +27,10 @@
             "context" : { "test" : "data" }
         }
     },
-    "displayName" : "Sample List",
+    "displayName" : "SFDC OAuth2 Example",
     "id" : "{{{tile_id}}}",
-    "name" : "samplelist",
-    "description" : "Dealroom details.",
+    "name" : "samplesfdc",
+    "description" : "SFDC OAuth2 Example",
     "style" : "LIST",
     "icons" : {
         "16" : "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif",

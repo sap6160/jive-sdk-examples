@@ -14,12 +14,9 @@
  *    limitations under the License.
  */
 
-/*
- * GET home page.
- */
 
+//todo: add the crypto handling here
 
 exports.route = function(req, res){
-    var conf = res.app.settings['jiveClientConfiguration'];
-    res.render('sampleactivity/action.html', { host: conf.baseUrl + ':' + conf.port  });
+    res.render('index', { title: 'You are posting stuff ' });
 };

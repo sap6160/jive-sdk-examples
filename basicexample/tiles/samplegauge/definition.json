@@ -1,7 +1,6 @@
 {
     "published" : "2013-02-28T15:12:16.768-0800",
     "updated" : "2013-02-28T15:12:16.768-0800",
-    "action" : "{{{tile_route}}}/action",
     "config" : "{{{tile_route}}}/configure",
     "register" : "{{{host}}}/registration",
     "client_id" : "{{{clientId}}}",

@@ -14,12 +14,12 @@
  *    limitations under the License.
  */
 
+var fs = require('fs');
 /*
  * GET home page.
  */
 
-
 exports.route = function(req, res){
     var conf = res.app.settings['jiveClientConfiguration'];
-    res.render('samplegauge/action.html');
+    res.render('samplesfdc/configuration.html', { host: conf.baseUrl + ':' + conf.port  });
 };
