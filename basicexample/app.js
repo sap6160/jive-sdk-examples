@@ -23,7 +23,11 @@ var express = require('express')
     , jiveClient = require('jive-sdk/client')
     , tileConfigurator = require('jive-sdk/tileConfigurator')
     , appConfigurator = require('jive-sdk/appConfigurator')
+    , filePersistence = require('jive-sdk/persistence/file')
     ;
+
+// setup for file based persistence
+jiveApi.setPersistenceListener( new filePersistence.persistenceListener() );
 
 var consolidate = require('consolidate');
 
