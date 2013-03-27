@@ -82,6 +82,10 @@ var startServer = function () {
     });
 };
 
+var failStartup = function(reason) {
+    throw reason ? reason : "Startup aborted.";
+};
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Setup the event handlers
 
@@ -89,6 +93,7 @@ app.on('event:configurationReady', configureApp);
 app.on('event:initialConfigurationComplete', tileConfigurator.configureTiles);
 app.on('event:tileConfigurationComplete', appConfigurator.configureApplication);
 app.on('event:clientAppConfigurationComplete', startServer);
+app.on('event:clientAppConfigurationFailed', failStartup );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Kick off server start sequence
