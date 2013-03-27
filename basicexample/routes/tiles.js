@@ -9,6 +9,9 @@ function getProcessed(conf, all) {
     var processed = [];
 
     all.forEach( function( tile ) {
+        if ( !tile ) {
+            return;
+        }
         var name = tile.name;
         var stringified = JSON.stringify(tile);
         stringified =  mustache.render(stringified, {

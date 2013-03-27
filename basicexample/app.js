@@ -20,7 +20,7 @@ var express = require('express')
     , jiveClient = require('jive-sdk/client')
     , tileConfigurator = require('jive-sdk/tile/configurator')
     , appConfigurator = require('jive-sdk/app/configurator')
-    , filePersistence = require('jive-sdk/persistence/file')
+    , persistence = require('jive-sdk/persistence/file')
     , consolidate = require('consolidate')
 ;
 
@@ -39,7 +39,7 @@ var start = function () {
 
 var configureApp = function (data) {
     // Setup for file based persistence
-    jiveApi.setPersistenceListener( new filePersistence.persistenceListener() );
+    jiveApi.setPersistenceListener( new persistence.persistenceListener(app) );
 
     app.configure(function () {
         app.engine('html', consolidate.mustache);
