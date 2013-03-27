@@ -22,6 +22,7 @@ var express = require('express')
     , jiveApi = require('jive-sdk/api')
     , jiveClient = require('jive-sdk/client')
     , tileConfigurator = require('jive-sdk/tileConfigurator')
+    , appConfigurator = require('jive-sdk/appConfigurator')
     ;
 
 var consolidate = require('consolidate');
@@ -87,7 +88,8 @@ var startServer = function () {
 //Setup the event handlers
 app.on('event:configurationReady', configureApp);
 app.on('event:initialConfigurationComplete', tileConfigurator.configureTiles);
-app.on('event:clientConfigurationComplete', startServer);
+app.on('event:tileConfigurationComplete', appConfigurator.configureApplication);
+app.on('event:clientAppConfigurationComplete', startServer);
 
 //Time to get things going...
 readConfiguration();
