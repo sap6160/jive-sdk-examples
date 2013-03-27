@@ -1,7 +1,7 @@
 var mustache = require('mustache');
 var http = require('http');
 var url = require('url');
-var tileRegistry = require('jive-sdk/tileRegistry');
+var tileRegistry = require('jive-sdk/tile/registry');
 var events = require('events');
 
 function getProcessed(conf, all) {

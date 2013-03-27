@@ -15,7 +15,7 @@
  */
 
 var count = 0;
-var task = require("jive-sdk/task");
+var task = require("jive-sdk/tile/task");
 
 var thisTask = new task();
 

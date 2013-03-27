@@ -21,8 +21,8 @@ var express = require('express')
     , jive = require('jive-sdk')
     , jiveApi = require('jive-sdk/api')
     , jiveClient = require('jive-sdk/client')
-    , tileConfigurator = require('jive-sdk/tileConfigurator')
-    , appConfigurator = require('jive-sdk/appConfigurator')
+    , tileConfigurator = require('jive-sdk/tile/configurator')
+    , appConfigurator = require('jive-sdk/app/configurator')
     , filePersistence = require('jive-sdk/persistence/file')
     ;
 
