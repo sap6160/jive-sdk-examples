@@ -1,7 +1,3 @@
-/**
- * Module dependencies.
- */
-
 /*
  read config file emit the "configurationReady" event
 
@@ -9,10 +5,11 @@
  initialize, when done, will emit the "initializeComplete" event
 
  on "initialilzeComplete" start the server
+*/
 
- */
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Setup module depdendencies
 
-//Setup the base configuration for the app
 var express = require('express')
     , fs = require('fs')
     , routes = require('./routes')
@@ -24,29 +21,25 @@ var express = require('express')
     , tileConfigurator = require('jive-sdk/tile/configurator')
     , appConfigurator = require('jive-sdk/app/configurator')
     , filePersistence = require('jive-sdk/persistence/file')
-    ;
-
-// setup for file based persistence
-jiveApi.setPersistenceListener( new filePersistence.persistenceListener() );
-
-var consolidate = require('consolidate');
+    , consolidate = require('consolidate')
+;
 
 var app = express();
 
-var readConfiguration = function () {
-    //todo: rather than have a separate file, should we simply add these values to package.json?
+var start = function () {
+    // read configuration
     fs.readFile(__dirname + '/jiveclientconfiguration.json', 'utf8', function (err, data) {
         if (err) throw err;
         console.log(data);
 
-        //Parse the json file and make an object.
         var jiveClientConfiguration = JSON.parse(data);
         app.emit('event:configurationReady', jiveClientConfiguration);
     });
-
 };
 
 var configureApp = function (data) {
+    // Setup for file based persistence
+    jiveApi.setPersistenceListener( new filePersistence.persistenceListener() );
 
     app.configure(function () {
         app.engine('html', consolidate.mustache);
@@ -89,11 +82,14 @@ var startServer = function () {
     });
 };
 
-//Setup the event handlers
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Setup the event handlers
+
 app.on('event:configurationReady', configureApp);
 app.on('event:initialConfigurationComplete', tileConfigurator.configureTiles);
 app.on('event:tileConfigurationComplete', appConfigurator.configureApplication);
 app.on('event:clientAppConfigurationComplete', startServer);
 
-//Time to get things going...
-readConfiguration();
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Kick off server start sequence
+start();
