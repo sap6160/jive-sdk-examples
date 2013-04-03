@@ -59,7 +59,7 @@ exports.task = function(context) {
                 };
 
                 // todo -- make this event driven
-                jiveApi.pushActivity( clientId, instance, dataToPush, function() {});
+                jiveApi.TileInstance.pushActivity( clientId, instance, dataToPush, function() {});
             });
         }
 
