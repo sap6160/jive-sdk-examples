@@ -1,8 +1,25 @@
+/*
+ * Copyright 2013 Jive Software
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 var mustache = require('mustache');
 var http = require('http');
 var url = require('url');
 var tileRegistry = require('jive-sdk/tile/registry');
 var events = require('events');
+var q = require('q');
 
 function getProcessed(conf, all) {
     var host = conf.baseUrl + ':' + conf.port;
@@ -91,26 +108,18 @@ exports.installTiles = function( req, res ) {
 
     var jiveHost = query['jiveHost'];
     var jivePort = query['jivePort'];
+    var context = query['context'];
 
     jiveApi.TileDefinition.findAll().execute( function( all ) {
         var processed = getProcessed(conf, all);
 
-        var requestCount = processed.length;
-        var requestProgress = new events.EventEmitter();
         var responses = {};
 
-        processed.forEach( function(tile) {
-            var postBody = JSON.stringify(tile);
-            console.log("Making request to jive instance for " + tile.name + ":\n", postBody);
+        var doDefinition = function( requestParams, tile, postBody ) {
 
-            var requestParams = {
-                host    : jiveHost,
-                port    : jivePort,
-                method  : 'POST',
-                path    : '/api/jivelinks/v1/tiles/definitions',
-                headers : { 'Authorization' : 'Basic YWRtaW46YWRtaW4='}
-            };
-            requestParams['headers']['Content-Length'] = Buffer.byteLength(postBody, 'utf8');
+            var deferred = q.defer();
+
+            console.log("Making request to jive instance for " + tile.name + ":\n", postBody, ' *** Start *** ts', new Date().getTime() );
 
             var jiveRequest =  http.request( requestParams, function(jiveResponse) {
                 var strBuf = [];
@@ -122,20 +131,26 @@ exports.installTiles = function( req, res ) {
                     console.log("Jive response for " + tile.name + ".  Status: " + jiveResponse.statusCode);
                     console.log("Headers: ", jiveResponse.headers);
                     console.log("Body: \n", str);
-                    --requestCount;
-                    requestProgress.emit("check");
+
+                        console.log('*** End *** ts', new Date().getTime() );
+
+                    deferred.resolve();
                 });
             });
+
             jiveRequest.on('error', function(e) {
                 console.log("error on request to jive instance: ", e);
             });
 
             jiveRequest.write(postBody, 'utf8');
             jiveRequest.end();
-        });
 
-        requestProgress.on("check", function(){
-            if(requestCount == 0){
+            return deferred.promise;
+        };
+
+        (function processOne() {
+            var tile = processed.shift();
+            if ( !tile ) {
                 Object.keys(responses).forEach(function(jiveResp){
                     res.write("\n//");
                     res.write(jiveResp);
@@ -143,8 +158,23 @@ exports.installTiles = function( req, res ) {
                     res.write(responses[jiveResp]);
                 });
                 res.end();
+                return;
             }
-        });
+
+            var postBody = JSON.stringify(tile);
+
+            var requestParams = {
+                host    : jiveHost,
+                port    : jivePort,
+                method  : 'POST',
+                path    : ( context ? '/' + context : '' ) + '/api/jivelinks/v1/tiles/definitions',
+                headers : { 'Authorization' : 'Basic YWRtaW46YWRtaW4='}
+            };
+            requestParams['headers']['Content-Length'] = Buffer.byteLength(postBody, 'utf8');
+
+            doDefinition(requestParams, tile, postBody).then( processOne );
+        })();
+
     });
 
     // todo -- what if bad things happen

@@ -11,6 +11,7 @@
     "mustache" : "*",
     "consolidate" : "*",
     "poplib" : "*",
+    "q" : "*",
     "multipart-parser" : "*"
   }
 }
