@@ -51,7 +51,7 @@
     },
     "displayName": "Sample List",
     "id": "{{{tile_id}}}",
-    "name": "samplelist",
+    "name": "sugar",
     "description": "Dealroom details.",
     "style": "LIST",
     "icons": {
