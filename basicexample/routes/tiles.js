@@ -14,6 +14,11 @@
  *    limitations under the License.
  */
 
+/**
+ * These are global, publically available endpoints useful in the administration of the service
+ * tiles, tile definitions, and other concerns.
+ */
+
 var mustache = require('mustache');
 var http = require('http');
 var url = require('url');
@@ -46,7 +51,12 @@ function getProcessed(conf, all) {
 }
 
 /**
- * List all the tiles
+ * Endpoint for development only.
+ *
+ * Calling GET on this endpoint returns JSON describing all the tile definitions available on this service.
+ *
+ * Takes no URL parameters.
+ *
  * @param req
  * @param res
  */
@@ -55,9 +65,6 @@ exports.tiles = function(req, res){
     var jiveApi = app.settings['jiveApi'];
 
     jiveApi.TileDefinition.findAll().execute( function( all ) {
-
-        // todo -- maybe delegate to jiveclient_tools
-
         var conf = res.app.settings['jiveClientConfiguration'];
 
         var processed = getProcessed(conf, all);
@@ -67,8 +74,6 @@ exports.tiles = function(req, res){
         res.end(body);
 
     } );
-
-    // todo -- what if bad things happen
 };
 
 exports.registration = function( req, res ) {
@@ -96,7 +101,19 @@ exports.registration = function( req, res ) {
     res.send();
 };
 
-// todo -- this is for jive development only?
+/**
+ * Endpoint for development only.
+ *
+ * Given a target jive host, calling GET on this endpoint will install any
+ * tile definitions available on this service.
+ *
+ * Takes the following URL parameters:
+ * - jiveHost: required target Jive host
+ * - jivePort: optinoal target Jive Port, defaults to 80 if not specified
+ * - context: optional non-root context path (eg. /sbs)
+ * @param req
+ * @param res
+ */
 exports.installTiles = function( req, res ) {
     var app = req.app;
     var conf = res.app.settings['jiveClientConfiguration'];
@@ -107,7 +124,7 @@ exports.installTiles = function( req, res ) {
     var query = url_parts.query;
 
     var jiveHost = query['jiveHost'];
-    var jivePort = query['jivePort'];
+    var jivePort = query['jivePort'] || 80;
     var context = query['context'];
 
     jiveApi.TileDefinition.findAll().execute( function( all ) {
@@ -116,10 +133,8 @@ exports.installTiles = function( req, res ) {
         var responses = {};
 
         var doDefinition = function( requestParams, tile, postBody ) {
-
             var deferred = q.defer();
-
-            console.log("Making request to jive instance for " + tile.name + ":\n", postBody, ' *** Start *** ts', new Date().getTime() );
+            console.log("Making request to jive instance for " + tile.name + ":\n", postBody);
 
             var jiveRequest =  http.request( requestParams, function(jiveResponse) {
                 var strBuf = [];
@@ -131,9 +146,6 @@ exports.installTiles = function( req, res ) {
                     console.log("Jive response for " + tile.name + ".  Status: " + jiveResponse.statusCode);
                     console.log("Headers: ", jiveResponse.headers);
                     console.log("Body: \n", str);
-
-                        console.log('*** End *** ts', new Date().getTime() );
-
                     deferred.resolve();
                 });
             });
@@ -176,6 +188,4 @@ exports.installTiles = function( req, res ) {
         })();
 
     });
-
-    // todo -- what if bad things happen
 };
