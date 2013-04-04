@@ -18,6 +18,12 @@ exports.init = function(registry, def){
     registry.addListener("newInstance." + def.name, function(theInstance){
         // override
     });
+    registry.addListener("destroyingInstance." + def.name, function(theInstance){
+        // override
+    });
+    registry.addListener("destroyedInstance." + def.name, function(theInstance){
+        // override
+    });
     registry.addListener("pushedUpdateInstance." + def.name, function(theInstance, type, pushedData ){
         // override
     });
