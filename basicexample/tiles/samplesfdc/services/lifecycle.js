@@ -14,9 +14,11 @@
  *    limitations under the License.
  */
 
-
-//todo: add the crypto handling here
-
-exports.route = function(req, res){
-    res.render('index', { title: 'You are posting stuff ' });
+exports.init = function(registry, def){
+    registry.addListener("newInstance." + def.name, function(theInstance){
+        // override
+    });
+    registry.addListener("pushedUpdateInstance." + def.name, function(theInstance, type, pushedData ){
+        // override
+    });
 };

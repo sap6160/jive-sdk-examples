@@ -16,6 +16,9 @@
 
 exports.init = function(registry, def){
     registry.addListener("newInstance." + def.name, function(theInstance){
-        console.log("a new " + def.name + " instance was created", theInstance);
+        // override
+    });
+    registry.addListener("pushedUpdateInstance." + def.name, function(theInstance, type, pushedData ){
+        // override
     });
 };
