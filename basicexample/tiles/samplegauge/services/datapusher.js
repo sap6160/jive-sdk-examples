@@ -16,6 +16,8 @@
 
 var count = 0;
 
+var tileRegistry = require("jive-sdk/tile/registry");
+
 exports.task = function(context) {
     var app = context.app;
     var jiveApi = app.settings['jiveApi'];
@@ -42,8 +44,7 @@ exports.task = function(context) {
                     }
                 };
 
-                // todo -- make this event driven
-                jiveApi.TileInstance.pushData( app.settings['clientId'], instance, dataToPush, function() {});
+                tileRegistry.emit("pushDataInstance." + instance.name, instance, dataToPush, function () { } );
             });
         }
     });

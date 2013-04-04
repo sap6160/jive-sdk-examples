@@ -16,6 +16,7 @@
 
 var count = 0;
 var task = require("jive-sdk/tile/task");
+var tileRegistry = require("jive-sdk/tile/registry");
 
 var thisTask = new task();
 
@@ -49,7 +50,7 @@ function processTileInstance(instance) {
         }
     };
 
-    thisTask.emit("event:pushData", instance, dataToPush, function () { });
+    tileRegistry.emit("pushDataInstance." + instance.name, instance, dataToPush, function () { } );
 }
 
 thisTask.runnable = function(context) {

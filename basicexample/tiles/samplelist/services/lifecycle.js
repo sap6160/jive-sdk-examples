@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-exports.init = function(registry, def){
+exports.registerEvents = function(registry, def){
     registry.addListener("newInstance." + def.name, function(theInstance){
         // override
     });
@@ -24,7 +24,13 @@ exports.init = function(registry, def){
     registry.addListener("destroyedInstance." + def.name, function(theInstance){
         // override
     });
-    registry.addListener("pushedUpdateInstance." + def.name, function(theInstance, type, pushedData ){
+    tileRegistry.addListener("pushDataInstance." + def.name, function(theInstance, data, callback){
+        // override
+    });
+    tileRegistry.addListener("pushActivityInstance." + def.name, function(theInstance, data, callback){
+        // override
+    });
+    registry.addListener("pushedUpdateInstance." + def.name, function(theInstance, type, pushedData, response ){
         // override
     });
 };
