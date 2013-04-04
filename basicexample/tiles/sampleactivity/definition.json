@@ -1,12 +1,6 @@
 {
-    "published" : "2013-02-28T15:12:16.768-0800",
-    "updated" : "2013-02-28T15:12:16.768-0800",
-    "config" : "{{{tile_route}}}/configure",
-    "register" : "{{{host}}}/registration",
-    "client_id" : "{{{clientId}}}",
     "sampleData" : {},
     "displayName" : "Opportunity Activity",
-    "id" : "{{{tile_id}}}",
     "name" : "sampleactivity",
     "description" : "Dealroom activity.",
     "style" : "ACTIVITY",

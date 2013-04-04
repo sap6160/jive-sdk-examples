@@ -1,9 +1,4 @@
 {
-    "published" : "2013-02-28T15:12:16.768-0800",
-    "updated" : "2013-02-28T15:12:16.768-0800",
-    "config" : "{{{tile_route}}}/configure",
-    "register" : "{{{host}}}/registration",
-    "client_id" : "{{{clientId}}}",
     "sampleData" : {
         "message": "You guys are CRUSHING it! Way to go team!",
         "sections": [
@@ -32,7 +27,6 @@
         "status": "Excellent"
     },
     "displayName" : "Sample Gauge",
-    "id" : "{{{tile_id}}}",
     "name" : "samplegauge",
     "description" : "Dealroom details.",
     "style" : "GAUGE",
