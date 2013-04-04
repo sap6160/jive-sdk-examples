@@ -17,8 +17,12 @@
 var count = 0;
 
 var tileRegistry = require("jive-sdk/tile/registry");
+var task = require("jive-sdk/tile/task");
 
-exports.task = function(context) {
+exports.task = new task(
+
+    // runnable
+    function(context) {
     var app = context.app;
     var jiveApi = app.settings['jiveApi'];
     var jiveClient = app.settings['jiveClient'];
@@ -65,7 +69,4 @@ exports.task = function(context) {
         }
 
     });
-//    console.log(module.id + " task ran");
-};
-
-exports.interval = 5000;
+} );

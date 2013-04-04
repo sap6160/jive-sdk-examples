@@ -18,6 +18,7 @@ var POP3Client = require('poplib');
 var MultipartParser = require('multipart-parser');
 var http = require('http');
 var util = require('util');
+var task = require("jive-sdk/tile/task");
 
 var doPush = function( jiveApi, jiveClient, clientId, instance, userName, userEmail, subject, body, retried ) {
     body = body.substring( 0, Math.min(400, body.length ) );
@@ -48,7 +49,10 @@ var doPush = function( jiveApi, jiveClient, clientId, instance, userName, userEm
     jiveApi.TileInstance.pushActivity( clientId, instance, dataToPush, function() {});
 };
 
-exports.task = function(context) {
+exports.task = new task(
+
+    // runnable
+    function(context) {
     var app = context.app;
     var jiveApi = app.settings['jiveApi'];
     var jiveClient = app.settings['jiveClient'];
@@ -190,6 +194,4 @@ exports.task = function(context) {
         }
 
     });
-};
-
-exports.interval = 5000;
+});

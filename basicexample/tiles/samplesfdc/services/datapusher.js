@@ -14,29 +14,26 @@
  *    limitations under the License.
  */
 
-var count = 0;
 var task = require("jive-sdk/tile/task");
-
-var thisTask = new task();
-
-exports.task = thisTask;
-exports.interval = 5000;
 
 function processTileInstance(instance) {
     console.log('running pusher for ', instance.name, 'instance', instance.id);
     // todo
 }
 
-thisTask.runnable = function(context) {
-    var app = context.app;
-    var jiveApi = app.settings['jiveApi'];
-    var jiveClient = app.settings['jiveClient'];
+exports.task = new task(
+    // runnable
+    function(context) {
+        var app = context.app;
+        var jiveApi = app.settings['jiveApi'];
+        var jiveClient = app.settings['jiveClient'];
 
-    jiveApi.TileInstance.findByDefinitionName( 'samplesfdc' ).execute( function(instances) {
-        if ( instances ) {
-            instances.forEach( function( instance ) {
-                processTileInstance(instance);
-            });
-        }
-    });
-};
+        jiveApi.TileInstance.findByDefinitionName( 'samplesfdc' ).execute( function(instances) {
+            if ( instances ) {
+                instances.forEach( function( instance ) {
+                    processTileInstance(instance);
+                });
+            }
+        });
+    }
+);
