@@ -68,9 +68,6 @@ var configureApp = function (data) {
 
     // configure global routes
     app.get('/', routes.index);
-    app.get('/tiles', require('./routes/tiles').tiles);
-    app.get('/tilesInstall', require('./routes/tiles').installTiles);
-    app.post('/registration', require('./routes/tiles').registration);
 
     app.emit('event:initialConfigurationComplete', app);
 };
