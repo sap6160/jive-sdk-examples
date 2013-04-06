@@ -17,7 +17,10 @@ var express = require('express')
 ;
 
 var app = express();
-
+app.use(express.bodyParser());
+app.use(express.logger('dev'));
+app.use(express.methodOverride());
+app.use(app.router);
 app.configure('development', function () {
     app.use(express.errorHandler());
 });
