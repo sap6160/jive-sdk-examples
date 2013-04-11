@@ -1,20 +1,26 @@
 /*
- read config file emit the "configurationReady" event
-
- on the configuration event do "initialize"
- initialize, when done, will emit the "initializeComplete" event
-
- on "initialilzeComplete" start the server
-*/
+ * Copyright 2013 Jive Software
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Setup module depdendencies
+// Setup express
 
-var express = require('express')
-    , routes = require('./routes')
-    , http = require('http')
-    , bootstrap = require('jive-sdk/app/bootstrap')
-;
+var express = require('express'),
+    routes = require('./routes'),
+    http = require('http'),
+    jive = require('jive-sdk/app/bootstrap');
 
 var app = express();
 app.use(express.bodyParser());
@@ -27,7 +33,7 @@ app.configure('development', function () {
 app.get('/', routes.index);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Setup the event handlers
+// Setup jive
 
 // start server
 app.on('event:clientAppConfigurationComplete', function () {
@@ -41,6 +47,5 @@ app.on('event:clientAppConfigurationFailed', function(reason) {
     throw reason ? reason : "Startup aborted.";
 } );
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
 // Kick off server start sequence
-bootstrap.start(app, __dirname);
+jive.start(app, __dirname);
