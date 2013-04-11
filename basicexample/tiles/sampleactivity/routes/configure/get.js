@@ -14,10 +14,7 @@
  *    limitations under the License.
  */
 
-/*
- * GET home page.
- */
-
+var jive = require("jive-sdk");
 
 exports.route = function(req, res){
     var conf = res.app.settings['jiveClientConfiguration'];

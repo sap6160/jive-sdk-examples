@@ -19,8 +19,9 @@ var MultipartParser = require('multipart-parser');
 var http = require('http');
 var util = require('util');
 var task = require("jive-sdk/tile/task");
+var jive = require("jive-sdk");
 
-var doPush = function( jiveApi, jiveClient, clientId, instance, userName, userEmail, subject, body, retried ) {
+var doPush = function( jiveApi, clientId, instance, userName, userEmail, subject, body, retried ) {
     body = body.substring( 0, Math.min(400, body.length ) );
 
     var dataToPush = {
@@ -54,13 +55,11 @@ exports.task = new task(
     // runnable
     function(context) {
     var app = context.app;
-    var jiveApi = app.settings['jiveApi'];
-    var jiveClient = app.settings['jiveClient'];
-    var settings = app.settings['jiveClientConfiguration'];
+    var settings = jive.config.fetch();
     var debug = false;
 
 
-    jiveApi.TileInstance.findByDefinitionName( 'email' ).execute( function(instances) {
+    jive.TileInstance.findByDefinitionName( 'email' ).execute( function(instances) {
         if ( instances ) {
 
             instances.forEach( function( instance ) {
@@ -130,7 +129,7 @@ exports.task = new task(
                                     part.data += chunk;
                                 }).on('end', function () {
                                     part.ended = true;
-                                    doPush(jiveApi, jiveClient, settings['clientId'], instance,
+                                    doPush(jive, settings['clientId'], instance,
                                         fromUser, fromEmail, subject, part.data );
                                 });
                             };

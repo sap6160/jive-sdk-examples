@@ -14,10 +14,11 @@
  *    limitations under the License.
  */
 
+var jive = require('jive-sdk');
 /*
  * GET home page.
  */
 exports.route = function(req, res){
-    var conf = res.app.settings['jiveClientConfiguration'];
+    var conf = jive.config.fetch();
     res.render('email/configuration.html', { host: conf.baseUrl + ':' + conf.port  });
 };

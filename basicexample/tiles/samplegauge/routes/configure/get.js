@@ -14,6 +14,7 @@
  *    limitations under the License.
  */
 
+var jive = require("jive-sdk");
 var fs = require('fs');
 /*
  * GET home page.

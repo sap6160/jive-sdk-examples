@@ -18,6 +18,7 @@ var count = 0;
 
 var tileRegistry = require("jive-sdk/tile/registry");
 var task = require("jive-sdk/tile/task");
+var jive = require("jive-sdk");
 
 exports.task = new task(
     // runnable

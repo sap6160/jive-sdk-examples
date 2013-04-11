@@ -40,12 +40,17 @@ http.createServer(app).listen(8090, function () {
 
 var task = require("jive-sdk/tile/task");
 var tileRoutes = require("jive-sdk/routes/tiles");
+var jive = require('jive-sdk');
 
-app.set('jiveClientConfiguration', {
+
+var configuration = {
     'port' : 8090,
     'baseUrl' : 'http://localhost',
-    'clientId' : '766t8osmgixp87ypdbbvmu637k98fzvc'
-});
+    'clientId' : '766t8osmgixp87ypdbbvmu637k98fzvc',
+    'persistence' : new jive.persistence.file
+};
+
+jive.config.save( configuration );
 
 // configuration UI route
 app.get( '/configure', function( req, res ) {
@@ -82,4 +87,3 @@ require('jive-sdk/api').TileDefinition.configure(
         { 'pushedUpdateInstance' : function(instance) { console.log( instance, "pushed activity"); } }
     ]
 );
-
