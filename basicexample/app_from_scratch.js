@@ -49,7 +49,7 @@ app.set('jiveClientConfiguration', {
 // configuration UI route
 app.get( '/configure', function( req, res ) {
     res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.end( "<html><body><b>A configuration UI!</b></body></html>" );
+    res.end( "<script>jive.tile.onOpen(function() { jive.tile.close({'config':'value'};})</script>" );
 } );
 
 // registration route -- defer to built in one
@@ -73,6 +73,11 @@ require('jive-sdk/api').TileDefinition.configure(
             "48": "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif",
             "128": "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif"
         }
-    }
+    },
+    // event listeners
+    [
+        { 'newInstance' : function(instance) { console.log( instance, " was registered"); } },
+        { 'pushedUpdateInstance' : function(instance) { console.log( instance, "pushed activity"); } }
+    ]
 );
 
