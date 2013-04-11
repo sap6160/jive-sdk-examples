@@ -43,7 +43,8 @@ var tileRoutes = require("jive-sdk/routes/tiles");
 
 app.set('jiveClientConfiguration', {
     'port' : 8090,
-    'baseUrl' : 'http://localhost'
+    'baseUrl' : 'http://localhost',
+    'clientId' : '766t8osmgixp87ypdbbvmu637k98fzvc'
 });
 
 // configuration UI route
@@ -57,6 +58,7 @@ app.post( '/registration', tileRoutes.registration );
 
 // setup a useful endpoint to show what tiles are available on your service
 app.get( '/tiles', tileRoutes.tiles );
+app.get( '/tilesInstall', tileRoutes.installTiles );
 
 // configure your tile
 require('jive-sdk/api').TileDefinition.configure(
