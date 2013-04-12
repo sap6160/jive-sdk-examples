@@ -14,17 +14,38 @@
  *    limitations under the License.
  */
 
-exports.registerEvents = function(registry, def){
-    registry.addListener("newInstance." + def.name, function(theInstance){
-        // override
-    });
-    registry.addListener("destroyingInstance." + def.name, function(theInstance){
-        // override
-    });
-    registry.addListener("destroyedInstance." + def.name, function(theInstance){
-        // override
-    });
-    registry.addListener("pushedUpdateInstance." + def.name, function(theInstance, type, pushedData, response ){
-        // override
-    });
+exports.registerEvents = function() {
+
+    return [
+
+        {
+            'event': 'newInstance',
+            'handler' : function(theInstance){
+                // override
+            }
+        },
+
+        {
+            'event': 'destroyingInstance',
+            'handler' : function(theInstance){
+                // override
+            }
+        },
+
+        {
+            'event': 'destroyedInstance',
+            'handler' : function(theInstance){
+                // override
+            }
+        },
+
+        {
+            'event': 'pushedUpdateInstance',
+            'handler' : function(theInstance, type, pushedData, response){
+                // override
+            }
+        }
+
+    ];
+
 };

@@ -41,7 +41,6 @@ http.createServer(app).listen(8090, function () {
 var tileRoutes = require("jive-sdk/routes/tiles");
 var jive = require('jive-sdk');
 
-
 var configuration = {
     'port' : 8090,
     'baseUrl' : 'http://lt-a7-120000',
@@ -82,8 +81,10 @@ jive.extstreams.definitions.configure(
     },
     // event listeners
     [
-        { 'newInstance' : function(instance) { console.log( instance, " was registered"); } },
-        { 'pushedUpdateInstance' : function(instance) { console.log( instance, "pushed activity"); } }
+        {
+            'event':'pushedUpdateInstance',
+            'handler' : function(instance) { console.log( instance, "pushed activity"); }
+        }
     ]
 );
 
