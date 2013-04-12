@@ -53,7 +53,7 @@ jive.config.save( configuration );
 // configuration UI route
 app.get( '/configure', function( req, res ) {
     res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.end( "<html><head><script>jive.tile.onOpen(function() { jive.tile.close({'config':'value'});});</script></head></html>" );
+    res.end( "<script>jive.tile.onOpen(function() { jive.tile.close({'config':'value'});});</script>" );
 } );
 
 // registration route -- defer to built in one
@@ -102,18 +102,15 @@ jive.tasks.schedule( function() {
             var dataToPush = {
                 "data":
                 {
-
                     "title": "Account Details",
                     "contents": [
                         {
                             "name": "Name",
-                            "value": "Edge Communications " + new Date().getTime(),
-                            "url": ""
+                            "value": "Edge Communications " + new Date().getTime()
                         },
                         {
                             "name": "Name2",
-                            "value": "Edge Communications2 " + new Date().getTime(),
-                            "url": ""
+                            "value": "Edge Communications2 " + new Date().getTime()
                         }
                     ]
                 }
