@@ -53,10 +53,8 @@ exports.task = new jive.tasks.build(
 
     // runnable
     function(context) {
-    var app = context.app;
     var settings = jive.config.fetch();
     var debug = false;
-
 
     jive.extstreams.findByDefinitionName( 'email' ).execute( function(instances) {
         if ( instances ) {

@@ -21,14 +21,10 @@ var jive = require("jive-sdk");
 exports.task = new jive.tasks.build(
 
     // runnable
-    function(context) {
-    var app = context.app;
-    var jiveApi = app.settings['jiveApi'];
-    var jiveClient = app.settings['jiveClient'];
-    var settings = app.settings['jiveClientConfiguration'];
-    var clientId = settings['clientId'];
+    function() {
+    var clientId = jive.config.fetch()['clientId'];
 
-    jiveApi.extstreams.findByDefinitionName( 'sampleactivity' ).execute( function(instances) {
+    jive.extstreams.findByDefinitionName( 'sampleactivity' ).execute( function(instances) {
         if ( instances ) {
             instances.forEach( function( instance ) {
 

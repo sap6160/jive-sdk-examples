@@ -14,38 +14,34 @@
  *    limitations under the License.
  */
 
-exports.registerEvents = function() {
+exports.registerEvents = [
 
-    return [
-
-        {
-            'event': 'newInstance',
-            'handler' : function(theInstance){
-                // override
-            }
-        },
-
-        {
-            'event': 'destroyingInstance',
-            'handler' : function(theInstance){
-                // override
-            }
-        },
-
-        {
-            'event': 'destroyedInstance',
-            'handler' : function(theInstance){
-                // override
-            }
-        },
-
-        {
-            'event': 'pushedUpdateInstance',
-            'handler' : function(theInstance, type, pushedData, response){
-                // override
-            }
+    {
+        'event': 'newInstance',
+        'handler' : function(theInstance){
+            // override
         }
+    },
 
-    ];
+    {
+        'event': 'destroyingInstance',
+        'handler' : function(theInstance){
+            // override
+        }
+    },
 
-};
+    {
+        'event': 'destroyedInstance',
+        'handler' : function(theInstance){
+            // override
+        }
+    },
+
+    {
+        'event': 'pushedUpdateInstance',
+        'handler' : function(theInstance, type, pushedData, response){
+            // override
+        }
+    }
+
+];

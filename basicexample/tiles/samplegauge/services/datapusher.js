@@ -21,9 +21,7 @@ var jive = require("jive-sdk");
 exports.task = new jive.tasks.build(
     // runnable
     function(context) {
-    var app = context.app;
-    var settings = app.settings['jiveClientConfiguration'];
-    var clientId = settings['clientId'];
+    var clientId = jive.config.fetch()['clientId'];
 
     var statusNames = [ "Poor", "Fair", "Good", "Excellent", "Outstanding" ];
 
