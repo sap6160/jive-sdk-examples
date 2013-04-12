@@ -45,7 +45,7 @@ var jive = require('jive-sdk');
 
 var configuration = {
     'port' : 8090,
-    'baseUrl' : 'http://localhost',
+    'baseUrl' : 'http://lt-a7-120000',
     'clientId' : '766t8osmgixp87ypdbbvmu637k98fzvc',
     'persistence' : new jive.persistence.file
 };
@@ -66,7 +66,7 @@ app.get( '/tiles', tileRoutes.tiles );
 app.get( '/tilesInstall', tileRoutes.installTiles );
 
 // configure your tile
-require('jive-sdk/api').TileDefinition.configure(
+jive.extstreams.definitions.configure(
     {
         "sampleData": {},
         "config": "/configure",
@@ -87,3 +87,4 @@ require('jive-sdk/api').TileDefinition.configure(
         { 'pushedUpdateInstance' : function(instance) { console.log( instance, "pushed activity"); } }
     ]
 );
+
