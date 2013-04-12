@@ -38,7 +38,14 @@ exports.registerEvents = [
     },
 
     {
-        'event': 'pushedData',
+        'event': 'pushedActivity',
+        'handler' : function(theInstance, pushedData, response){
+            // override
+        }
+    },
+
+    {
+        'event': 'pushedComment',
         'handler' : function(theInstance, pushedData, response){
             // override
         }
