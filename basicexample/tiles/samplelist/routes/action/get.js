@@ -15,7 +15,7 @@
  */
 
 var jive = require("jive-sdk");
+
 exports.route = function(req, res){
-    var conf = res.app.settings['jiveClientConfiguration'];
     res.render('samplelist/action.html');
 };

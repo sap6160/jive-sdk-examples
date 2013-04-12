@@ -15,12 +15,11 @@
  */
 
 var jive = require("jive-sdk");
-var fs = require('fs');
 /*
  * GET home page.
  */
 
 exports.route = function(req, res){
-    var conf = res.app.settings['jiveClientConfiguration'];
+    var conf = jive.config.fetch();
     res.render('samplegauge/configuration.html', { host: conf.baseUrl + ':' + conf.port  });
 };

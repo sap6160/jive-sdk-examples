@@ -21,9 +21,6 @@
  */
 var fs = require('fs');
 
-
-
-
 var loginToSugar = function(app){
     console.log("Trying to login to sugar...");
     var password = 'Sugar1';
@@ -80,15 +77,8 @@ var loginToSugarCallback = function(res){
     });
 };
 
-
-
-
-
-
-
-
 //// EXPORTS
 exports.route = function(req, res){
-    var conf = res.app.settings['jiveClientConfiguration'];
+    var conf = jive.config.fetch();
     res.render('sampleSugarOpportunity/configuration.html', { host: conf.baseUrl + ':' + conf.port  });
 };

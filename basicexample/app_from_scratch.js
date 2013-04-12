@@ -82,8 +82,7 @@ jive.tiles.definitions.configure(
         "style": "TABLE",
         "icons": {
             "16": "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif",
-            "48": "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif",
-            "128": "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif"
+            "48": "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif"
         }
     },
     // event listeners

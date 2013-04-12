@@ -17,6 +17,6 @@
 var jive = require("jive-sdk");
 
 exports.route = function(req, res){
-    var conf = res.app.settings['jiveClientConfiguration'];
+    var conf = jive.config.fetch();
     res.render('sampleactivity/configuration.html', { host: conf.baseUrl + ':' + conf.port  });
 };
