@@ -16,7 +16,6 @@
 
 var count = 0;
 
-var tileRegistry = require("jive-sdk/tile/registry");
 var task = require("jive-sdk/tile/task");
 var jive = require("jive-sdk");
 
@@ -24,14 +23,12 @@ exports.task = new task(
     // runnable
     function(context) {
     var app = context.app;
-    var jiveApi = app.settings['jiveApi'];
-    var jiveClient = app.settings['jiveClient'];
     var settings = app.settings['jiveClientConfiguration'];
     var clientId = settings['clientId'];
 
     var statusNames = [ "Poor", "Fair", "Good", "Excellent", "Outstanding" ];
 
-    jiveApi.TileInstance.findByDefinitionName( 'samplegauge' ).execute( function(instances) {
+    jive.tiles.findByDefinitionName( 'samplegauge' ).execute( function(instances) {
         if ( instances ) {
             instances.forEach( function( instance ) {
                console.log('running pusher for ', instance.name, 'instance', instance.id );
@@ -48,7 +45,7 @@ exports.task = new task(
                     }
                 };
 
-                tileRegistry.emit("pushDataInstance." + instance.name, instance, dataToPush, function () { } );
+                jive.tiles.pushData(clientId, instance, dataToPush);
             });
         }
     });

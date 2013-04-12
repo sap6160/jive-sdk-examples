@@ -24,12 +24,6 @@ exports.registerEvents = function(registry, def){
     registry.addListener("destroyedInstance." + def.name, function(theInstance){
         // override
     });
-    registry.addListener("pushDataInstance." + def.name, function(theInstance, data, callback){
-        // override
-    });
-    registry.addListener("pushActivityInstance." + def.name, function(theInstance, data, callback){
-        // override
-    });
     registry.addListener("pushedUpdateInstance." + def.name, function(theInstance, type, pushedData, response ){
         // override
     });

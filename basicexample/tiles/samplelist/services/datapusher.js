@@ -16,7 +16,7 @@
 
 var count = 0;
 var task = require("jive-sdk/tile/task");
-var tileRegistry = require("jive-sdk/tile/registry");
+var jive = require("jive-sdk");
 
 function processTileInstance(instance) {
     console.log('running pusher for ', instance.name, 'instance', instance.id);
@@ -45,17 +45,13 @@ function processTileInstance(instance) {
         }
     };
 
-    tileRegistry.emit("pushDataInstance." + instance.name, instance, dataToPush, function () { } );
+    jive.tiles.pushData(clientId, instance, dataToPush);
 }
 
 exports.task = new task(
     // runnable
-    function(context) {
-        var app = context.app;
-        var jiveApi = app.settings['jiveApi'];
-        var jiveClient = app.settings['jiveClient'];
-
-        jiveApi.TileInstance.findByDefinitionName( 'samplelist' ).execute( function(instances) {
+    function() {
+        jive.tiles.findByDefinitionName( 'samplelist' ).execute( function(instances) {
             if ( instances ) {
                 instances.forEach( function( instance ) {
                     processTileInstance(instance);

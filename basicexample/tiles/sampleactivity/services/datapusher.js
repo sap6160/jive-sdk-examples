@@ -16,7 +16,6 @@
 
 var count = 0;
 
-var tileRegistry = require("jive-sdk/tile/registry");
 var task = require("jive-sdk/tile/task");
 var jive = require("jive-sdk");
 
@@ -31,7 +30,7 @@ exports.task = new task(
     var settings = app.settings['jiveClientConfiguration'];
     var clientId = settings['clientId'];
 
-    jiveApi.TileInstance.findByDefinitionName( 'sampleactivity' ).execute( function(instances) {
+    jiveApi.extstreams.findByDefinitionName( 'sampleactivity' ).execute( function(instances) {
         if ( instances ) {
             instances.forEach( function( instance ) {
 
@@ -66,7 +65,7 @@ exports.task = new task(
                     }
                 };
 
-                tileRegistry.emit("pushActivityInstance." + instance.name, instance, dataToPush, function () { } );
+                jive.extstreams.pushActivity(clientId, instance, dataToPush);
             });
         }
 

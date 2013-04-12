@@ -47,7 +47,7 @@ var doPush = function( jiveApi, clientId, instance, userName, userEmail, subject
     };
 
     // todo -- make this event driven
-    jiveApi.TileInstance.pushActivity( clientId, instance, dataToPush, function() {});
+    jiveApi.extstreams.pushActivity( clientId, instance, dataToPush);
 };
 
 exports.task = new task(
@@ -59,7 +59,7 @@ exports.task = new task(
     var debug = false;
 
 
-    jive.TileInstance.findByDefinitionName( 'email' ).execute( function(instances) {
+    jive.extstreams.findByDefinitionName( 'email' ).execute( function(instances) {
         if ( instances ) {
 
             instances.forEach( function( instance ) {

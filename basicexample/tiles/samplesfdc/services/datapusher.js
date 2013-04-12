@@ -15,6 +15,7 @@
  */
 
 var task = require("jive-sdk/tile/task");
+var jive = require("jive-sdk");
 
 function processTileInstance(instance) {
     console.log('running pusher for ', instance.name, 'instance', instance.id);
@@ -23,12 +24,9 @@ function processTileInstance(instance) {
 
 exports.task = new task(
     // runnable
-    function(context) {
-        var app = context.app;
-        var jiveApi = app.settings['jiveApi'];
-        var jiveClient = app.settings['jiveClient'];
+    function() {
 
-        jiveApi.TileInstance.findByDefinitionName( 'samplesfdc' ).execute( function(instances) {
+        jive.extstreams.findByDefinitionName( 'samplesfdc' ).execute( function(instances) {
             if ( instances ) {
                 instances.forEach( function( instance ) {
                     processTileInstance(instance);
