@@ -89,5 +89,25 @@ jive.extstreams.definitions.configure(
 );
 
 // simple data pusher task
-jive.tasks.schedule( function() { console.log('scheduled task example')} );
+jive.tasks.schedule( function() {
+    jive.extstreams.findByDefinitionName('sampleactivity').execute( function(instances) {
+        instances.forEach( function( instance ) {
+            var dataToPush = {
+                "activity":
+                {
+                    "action":{ "name": "posted", "description": "Activity" },
+                    "actor":{ "name": "Actor Name", "email": "actor@email.com" },
+                    "object":{
+                        "type":"website", "url": "http://www.google.com",
+                        "image":"http://placehold.it/102x102",
+                        "title":"Activity", "description": "Activity " + JSON.stringify( instance['config'] )
+                    },
+                    "externalID": '' + new Date().getTime()
+                }
+            };
+
+            jive.extstreams.pushActivity( configuration['clientId'], instance, dataToPush );
+        } );
+    });
+});
 
