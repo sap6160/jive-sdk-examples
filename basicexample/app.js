@@ -20,7 +20,7 @@
 var express = require('express'),
     routes = require('./routes'),
     http = require('http'),
-    jive = require('jive-sdk/app/bootstrap');
+    jive = require('jive-sdk');
 
 var app = express();
 app.use(express.bodyParser());
@@ -48,4 +48,4 @@ app.on('event:clientAppConfigurationFailed', function(reason) {
 } );
 
 // Kick off server start sequence
-jive.start(app, __dirname);
+jive.config.bootstrap(app, __dirname );

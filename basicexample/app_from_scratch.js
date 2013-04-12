@@ -53,7 +53,7 @@ jive.config.save( configuration );
 // configuration UI route
 app.get( '/configure', function( req, res ) {
     res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.end( "<script>jive.tile.onOpen(function() { jive.tile.close({'config':'value'};})</script>" );
+    res.end( "<html><head><script>jive.tile.onOpen(function() { jive.tile.close({'config':'value'});});</script></head></html>" );
 } );
 
 // registration route -- defer to built in one
@@ -64,15 +64,22 @@ app.get( '/tiles', tileRoutes.tiles );
 app.get( '/tilesInstall', tileRoutes.installTiles );
 
 // configure your tile
-jive.extstreams.definitions.configure(
+jive.tiles.definitions.configure(
     {
-        "sampleData": {},
+        "sampleData": {"title": "Account Details",
+            "contents": [
+                {
+                    "name": "Name",
+                    "value": "Edge Communications",
+                    "url": ""
+                }
+            ]},
         "config": "/configure",
         "register": "/registration",
-        "displayName": "Opportunity Activity",
-        "name": "sampleactivity",
-        "description": "Dealroom activity.",
-        "style": "ACTIVITY",
+        "displayName": "Table Example",
+        "name": "sampletable",
+        "description": "Table example.",
+        "style": "TABLE",
         "icons": {
             "16": "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif",
             "48": "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif",
@@ -83,30 +90,36 @@ jive.extstreams.definitions.configure(
     [
         {
             'event':'pushedUpdateInstance',
-            'handler' : function(instance) { console.log( instance, "pushed activity"); }
+            'handler' : function(instance) { console.log( instance, "pushed data"); }
         }
     ]
 );
 
 // simple data pusher task
 jive.tasks.schedule( function() {
-    jive.extstreams.findByDefinitionName('sampleactivity').execute( function(instances) {
+    jive.tiles.findByDefinitionName('sampletable').execute( function(instances) {
         instances.forEach( function( instance ) {
             var dataToPush = {
-                "activity":
+                "data":
                 {
-                    "action":{ "name": "posted", "description": "Activity" },
-                    "actor":{ "name": "Actor Name", "email": "actor@email.com" },
-                    "object":{
-                        "type":"website", "url": "http://www.google.com",
-                        "image":"http://placehold.it/102x102",
-                        "title":"Activity", "description": "Activity " + JSON.stringify( instance['config'] )
-                    },
-                    "externalID": '' + new Date().getTime()
+
+                    "title": "Account Details",
+                    "contents": [
+                        {
+                            "name": "Name",
+                            "value": "Edge Communications " + new Date().getTime(),
+                            "url": ""
+                        },
+                        {
+                            "name": "Name2",
+                            "value": "Edge Communications2 " + new Date().getTime(),
+                            "url": ""
+                        }
+                    ]
                 }
             };
 
-            jive.extstreams.pushActivity( configuration['clientId'], instance, dataToPush );
+            jive.tiles.pushData( configuration['clientId'], instance, dataToPush );
         } );
     });
 });

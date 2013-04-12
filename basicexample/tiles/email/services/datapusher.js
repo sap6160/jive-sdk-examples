@@ -45,7 +45,6 @@ var doPush = function( jiveApi, clientId, instance, userName, userEmail, subject
         }
     };
 
-    // todo -- make this event driven
     jiveApi.extstreams.pushActivity( clientId, instance, dataToPush);
 };
 
