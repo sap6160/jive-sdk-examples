@@ -16,11 +16,9 @@
 
 var count = 0;
 
-var task = require("jive-sdk/tile/task");
 var jive = require("jive-sdk");
 
-
-exports.task = new task(
+exports.task = new jive.tasks.build(
 
     // runnable
     function(context) {

@@ -15,7 +15,6 @@
  */
 
 var count = 0;
-var task = require("jive-sdk/tile/task");
 var jive = require("jive-sdk");
 
 function processTileInstance(instance) {
@@ -48,7 +47,7 @@ function processTileInstance(instance) {
     jive.tiles.pushData(clientId, instance, dataToPush);
 }
 
-exports.task = new task(
+exports.task = new jive.tasks.build(
     // runnable
     function() {
         jive.tiles.findByDefinitionName( 'samplelist' ).execute( function(instances) {

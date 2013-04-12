@@ -14,7 +14,6 @@
  *    limitations under the License.
  */
 
-var task = require("jive-sdk/tile/task");
 var jive = require("jive-sdk");
 
 function processTileInstance(instance) {
@@ -22,7 +21,7 @@ function processTileInstance(instance) {
     // todo
 }
 
-exports.task = new task(
+exports.task = new jive.tasks.build(
     // runnable
     function() {
 

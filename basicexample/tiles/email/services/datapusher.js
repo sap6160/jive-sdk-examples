@@ -18,7 +18,6 @@ var POP3Client = require('poplib');
 var MultipartParser = require('multipart-parser');
 var http = require('http');
 var util = require('util');
-var task = require("jive-sdk/tile/task");
 var jive = require("jive-sdk");
 
 var doPush = function( jiveApi, clientId, instance, userName, userEmail, subject, body, retried ) {
@@ -50,7 +49,7 @@ var doPush = function( jiveApi, clientId, instance, userName, userEmail, subject
     jiveApi.extstreams.pushActivity( clientId, instance, dataToPush);
 };
 
-exports.task = new task(
+exports.task = new jive.tasks.build(
 
     // runnable
     function(context) {

@@ -38,7 +38,6 @@ http.createServer(app).listen(8090, function () {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Setup your service
 
-var task = require("jive-sdk/tile/task");
 var tileRoutes = require("jive-sdk/routes/tiles");
 var jive = require('jive-sdk');
 
@@ -87,4 +86,7 @@ jive.extstreams.definitions.configure(
         { 'pushedUpdateInstance' : function(instance) { console.log( instance, "pushed activity"); } }
     ]
 );
+
+// simple data pusher task
+jive.tasks.schedule( function() { console.log('fooo')} );
 
