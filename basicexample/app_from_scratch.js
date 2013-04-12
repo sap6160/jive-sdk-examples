@@ -88,5 +88,5 @@ jive.extstreams.definitions.configure(
 );
 
 // simple data pusher task
-jive.tasks.schedule( function() { console.log('fooo')} );
+jive.tasks.schedule( function() { console.log('scheduled task example')} );
 
