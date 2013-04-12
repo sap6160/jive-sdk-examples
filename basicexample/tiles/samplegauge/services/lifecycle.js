@@ -39,7 +39,7 @@ exports.registerEvents = [
 
     {
         'event': 'pushedUpdateInstance',
-        'handler' : function(theInstance, type, pushedData, response){
+        'handler' : function(theInstance, pushedData, response){
             // override
         }
     }
