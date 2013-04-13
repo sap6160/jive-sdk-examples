@@ -87,22 +87,19 @@ var definition = {
     }
 };
 
-var eventHandlers = [
-    {
-        'event':'pushedUpdateInstance',
-        'handler' : function(instance) { console.log( instance, "pushed data"); }
-    }
-];
+var pushedDataEventHandler = function(instance) {
+    console.log( instance, "pushed data");
+};
 
 // save your tile
 jive.tiles.definitions.save(definition).execute();
 
 // add event handlers
-jive.tiles.definitions.addListeners( eventHandlers );
+jive.tiles.definitions.addEventHandler( definition['name'], 'dataPushed', pushedDataEventHandler );
 
 // schedule a simple data pusher task
 jive.tasks.schedule( function() {
-    jive.tiles.findByDefinitionName('sampletable').execute( function(instances) {
+    jive.tiles.findByDefinitionName( definition['name'] ).execute( function(instances) {
         instances.forEach( function( instance ) {
             var dataToPush = {
                 "data":
