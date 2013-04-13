@@ -38,7 +38,6 @@ app.get('/', routes.index);
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Setup your service
 
-var tileRoutes = require("jive-sdk/routes/tiles");
 var jive = require('jive-sdk');
 
 jive.config.save( {
@@ -48,8 +47,8 @@ jive.config.save( {
 } );
 
 // setup a useful endpoint to show what tiles are available on your service
-app.get( '/tiles', tileRoutes.tiles );
-app.get( '/tilesInstall', tileRoutes.installTiles );
+app.get( '/tiles', jive.routes.tiles );
+app.get( '/tilesInstall', jive.routes.installTiles );
 
 jive.autowire.one( app, __dirname + '/tiles/samplelist', function() {
     http.createServer(app).listen(8090, function () {
