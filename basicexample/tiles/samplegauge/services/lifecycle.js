@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-exports.registerEvents = [
+exports.eventHandlers = [
 
     {
         'event': 'newInstance',
