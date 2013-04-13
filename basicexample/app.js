@@ -48,4 +48,4 @@ app.on('event:clientAppConfigurationFailed', function(reason) {
 } );
 
 // Kick off server start sequence
-jive.config.bootstrap(app, __dirname );
+jive.autowire.all(app, __dirname );
