@@ -60,7 +60,7 @@ app.get( '/configure', function( req, res ) {
 } );
 
 // registration route -- defer to built in one
-app.post( '/registration', tileRoutes.registration );
+app.post( '/registration', jive.routes.registration );
 
 // setup a useful endpoint to show what tiles are available on your service
 app.get( '/tiles', jive.routes.tiles );
