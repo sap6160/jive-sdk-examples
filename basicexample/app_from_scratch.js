@@ -66,38 +66,41 @@ app.post( '/registration', jive.routes.registration );
 app.get( '/tiles', jive.routes.tiles );
 app.get( '/tilesInstall', jive.routes.installTiles );
 
-// configure your tile
-jive.tiles.definitions.configure(
-    {
-        "sampleData": {"title": "Account Details",
-            "contents": [
-                {
-                    "name": "Name",
-                    "value": "Edge Communications",
-                    "url": ""
-                }
-            ]},
-        "config": "/configure",
-        "register": "/registration",
-        "displayName": "Table Example",
-        "name": "sampletable",
-        "description": "Table example.",
-        "style": "TABLE",
-        "icons": {
-            "16": "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif",
-            "48": "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif"
-        }
-    },
-    // event listeners
-    [
-        {
-            'event':'pushedUpdateInstance',
-            'handler' : function(instance) { console.log( instance, "pushed data"); }
-        }
-    ]
-);
+var definition = {
+    "sampleData": {"title": "Account Details",
+        "contents": [
+            {
+                "name": "Name",
+                "value": "Edge Communications",
+                "url": ""
+            }
+        ]},
+    "config": "/configure",
+    "register": "/registration",
+    "displayName": "Table Example",
+    "name": "sampletable",
+    "description": "Table example.",
+    "style": "TABLE",
+    "icons": {
+        "16": "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif",
+        "48": "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif"
+    }
+};
 
-// simple data pusher task
+var eventHandlers = [
+    {
+        'event':'pushedUpdateInstance',
+        'handler' : function(instance) { console.log( instance, "pushed data"); }
+    }
+];
+
+// save your tile
+jive.tiles.definitions.save(definition).execute();
+
+// add event handlers
+jive.tiles.definitions.addListeners( eventHandlers );
+
+// schedule a simple data pusher task
 jive.tasks.schedule( function() {
     jive.tiles.findByDefinitionName('sampletable').execute( function(instances) {
         instances.forEach( function( instance ) {
