@@ -14,6 +14,10 @@
  *    limitations under the License.
  */
 
+/**
+ * Demonstates how to kick off service autowiring just one tile directory.
+ */
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Setup express
 
@@ -40,8 +44,7 @@ var jive = require('jive-sdk');
 jive.config.save( {
     'port' : 8090,
     'baseUrl' : 'http://lt-a7-120000',
-    'clientId' : '766t8osmgixp87ypdbbvmu637k98fzvc',
-    'persistence' : new jive.persistence.file()
+    'clientId' : '766t8osmgixp87ypdbbvmu637k98fzvc'
 } );
 
 // setup a useful endpoint to show what tiles are available on your service

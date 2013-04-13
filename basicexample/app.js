@@ -14,6 +14,10 @@
  *    limitations under the License.
  */
 
+/**
+ * Demonstates how to kick off service autowiring a directory of tiles.
+ */
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Setup express
 
