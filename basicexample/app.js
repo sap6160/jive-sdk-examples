@@ -40,14 +40,14 @@ app.get('/', routes.index);
 // Setup jive
 
 // start server
-app.on('event:clientAppConfigurationComplete', function () {
-    http.createServer(app).listen(app.get('port'), function () {
-        console.log("Express server listening on port " + app.get('port'));
+app.on('event:jiveConfigurationComplete', function () {
+    var server = http.createServer(app).listen(app.get('port') || 8090, function () {
+        console.log("Express server listening on port " + server.address().port);
     });
 });
 
 // fail server startup
-app.on('event:clientAppConfigurationFailed', function(reason) {
+app.on('event:jiveConfigurationFailed', function(reason) {
     throw reason ? reason : "Startup aborted.";
 } );
 
