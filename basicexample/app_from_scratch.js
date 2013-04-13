@@ -45,7 +45,7 @@ var configuration = {
     'port' : 8090,
     'baseUrl' : 'http://lt-a7-120000',
     'clientId' : '766t8osmgixp87ypdbbvmu637k98fzvc',
-    'persistence' : new jive.persistence.mongdb
+    'persistence' : new jive.persistence.file()
 };
 
 jive.config.save( configuration );
