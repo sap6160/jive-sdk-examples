@@ -109,10 +109,6 @@ jive.tasks.schedule( function() {
                         {
                             "name": "Name",
                             "value": "Edge Communications " + new Date().getTime()
-                        },
-                        {
-                            "name": "Name2",
-                            "value": "Edge Communications2 " + new Date().getTime()
                         }
                     ]
                 }

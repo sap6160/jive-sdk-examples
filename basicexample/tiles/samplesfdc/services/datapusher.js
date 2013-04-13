@@ -21,16 +21,12 @@ function processTileInstance(instance) {
     // todo
 }
 
-exports.task = new jive.tasks.build(
-    // runnable
-    function() {
-
-        jive.extstreams.findByDefinitionName( 'samplesfdc' ).execute( function(instances) {
-            if ( instances ) {
-                instances.forEach( function( instance ) {
-                    processTileInstance(instance);
-                });
-            }
-        });
-    }
-);
+exports.task = function() {
+    jive.extstreams.findByDefinitionName( 'samplesfdc' ).execute( function(instances) {
+        if ( instances ) {
+            instances.forEach( function( instance ) {
+                processTileInstance(instance);
+            });
+        }
+    });
+};

@@ -18,10 +18,7 @@ var count = 0;
 
 var jive = require("jive-sdk");
 
-exports.task = new jive.tasks.build(
-    // runnable
-    function(context) {
-
+exports.task = function(context) {
     var statusNames = [ "Poor", "Fair", "Good", "Excellent", "Outstanding" ];
 
     jive.tiles.findByDefinitionName( 'samplegauge' ).execute( function(instances) {
@@ -79,4 +76,4 @@ exports.task = new jive.tasks.build(
 
         return '#' + redString + greenString + blueString;
     }
-});
+};

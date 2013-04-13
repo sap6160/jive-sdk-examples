@@ -18,11 +18,7 @@ var count = 0;
 
 var jive = require("jive-sdk");
 
-exports.task = new jive.tasks.build(
-
-    // runnable
-    function() {
-
+exports.task = function() {
     jive.extstreams.findByDefinitionName( 'sampleactivity' ).execute( function(instances) {
         if ( instances ) {
             instances.forEach( function( instance ) {
@@ -61,6 +57,5 @@ exports.task = new jive.tasks.build(
                 jive.extstreams.pushActivity(instance, dataToPush);
             });
         }
-
     });
-} );
+};
