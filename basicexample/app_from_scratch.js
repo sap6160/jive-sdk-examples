@@ -70,9 +70,8 @@ var definition = {
     "sampleData": {"title": "Account Details",
         "contents": [
             {
-                "name": "Name",
-                "value": "Edge Communications",
-                "url": ""
+                "name": "Value",
+                "value": "Initial data"
             }
         ]},
     "config": "/configure",
@@ -107,8 +106,8 @@ jive.tasks.schedule( function() {
                     "title": "Account Details",
                     "contents": [
                         {
-                            "name": "Name",
-                            "value": "Edge Communications " + new Date().getTime()
+                            "name": "Value",
+                            "value": "Updated " + new Date().getTime()
                         }
                     ]
                 }
