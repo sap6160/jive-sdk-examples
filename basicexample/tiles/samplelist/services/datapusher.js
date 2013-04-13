@@ -19,7 +19,6 @@ var jive = require("jive-sdk");
 
 function processTileInstance(instance) {
     console.log('running pusher for ', instance.name, 'instance', instance.id);
-    var clientId = jive.config.fetch()['clientId'];
 
     count++;
 
@@ -45,7 +44,7 @@ function processTileInstance(instance) {
         }
     };
 
-    jive.tiles.pushData(clientId, instance, dataToPush);
+    jive.tiles.pushData(instance, dataToPush);
 }
 
 exports.task = new jive.tasks.build(

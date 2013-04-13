@@ -21,7 +21,6 @@ var jive = require("jive-sdk");
 exports.task = new jive.tasks.build(
     // runnable
     function(context) {
-    var clientId = jive.config.fetch()['clientId'];
 
     var statusNames = [ "Poor", "Fair", "Good", "Excellent", "Outstanding" ];
 
@@ -42,7 +41,7 @@ exports.task = new jive.tasks.build(
                     }
                 };
 
-                jive.tiles.pushData(clientId, instance, dataToPush);
+                jive.tiles.pushData( instance, dataToPush);
             });
         }
     });

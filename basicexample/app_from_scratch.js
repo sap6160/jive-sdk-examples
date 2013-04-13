@@ -115,7 +115,7 @@ jive.tasks.schedule( function() {
                 }
             };
 
-            jive.tiles.pushData( configuration['clientId'], instance, dataToPush );
+            jive.tiles.pushData( instance, dataToPush );
         } );
     });
 });

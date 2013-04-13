@@ -22,7 +22,6 @@ exports.task = new jive.tasks.build(
 
     // runnable
     function() {
-    var clientId = jive.config.fetch()['clientId'];
 
     jive.extstreams.findByDefinitionName( 'sampleactivity' ).execute( function(instances) {
         if ( instances ) {
@@ -59,7 +58,7 @@ exports.task = new jive.tasks.build(
                     }
                 };
 
-                jive.extstreams.pushActivity(clientId, instance, dataToPush);
+                jive.extstreams.pushActivity(instance, dataToPush);
             });
         }
 

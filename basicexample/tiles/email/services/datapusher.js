@@ -20,7 +20,7 @@ var http = require('http');
 var util = require('util');
 var jive = require("jive-sdk");
 
-var doPush = function( jiveApi, clientId, instance, userName, userEmail, subject, body, retried ) {
+var doPush = function( jiveApi, instance, userName, userEmail, subject, body, retried ) {
     body = body.substring( 0, Math.min(400, body.length ) );
 
     var dataToPush = {
@@ -45,7 +45,7 @@ var doPush = function( jiveApi, clientId, instance, userName, userEmail, subject
         }
     };
 
-    jiveApi.extstreams.pushActivity( clientId, instance, dataToPush);
+    jiveApi.extstreams.pushActivity( instance, dataToPush);
 };
 
 exports.task = new jive.tasks.build(
@@ -125,7 +125,7 @@ exports.task = new jive.tasks.build(
                                     part.data += chunk;
                                 }).on('end', function () {
                                     part.ended = true;
-                                    doPush(jive, settings['clientId'], instance,
+                                    doPush(jive, instance,
                                         fromUser, fromEmail, subject, part.data );
                                 });
                             };
