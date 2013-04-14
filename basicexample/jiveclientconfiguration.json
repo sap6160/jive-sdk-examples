@@ -1,9 +1,6 @@
-{"baseUrl": "http://bullcityjive.com",
-    "port": "8090",
-    "appName": "mdw-client-app",
-    "appDescription": "MarksApp",
-    "userEmail": "YourUser ID Here",
-    "userPassword": "Your Password Here",
-    "callbackURL": "http://www.yahoo.com",
-    "filePersistenceRootDir" : "."
+{
+    "baseUrl": "http://lt-a7-120000.jiveland.com",
+    "port": "8091",
+    "clientId": "766t8osmgixp87ypdbbvmu637k98fzvc",
+    "clientSecret": "hvf7zltbk6tjpkpe83yapsupl4regc.DDKWsHugwN8cp9fNu-C02ylDAVE.1.s"
 }

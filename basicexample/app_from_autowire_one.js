@@ -46,12 +46,12 @@ jive.config.save( {
     'clientId' : '766t8osmgixp87ypdbbvmu637k98fzvc'
 } );
 
-// setup a useful endpoint to show what tiles are available on your service
-app.get( '/tiles', jive.routes.tiles );
-app.get( '/tilesInstall', jive.routes.installTiles );
+var startServer = function () {
+    var server = http.createServer(app).listen( app.get('port') || 8090, function () {
+        console.log("Express server listening on port " + server.address().port);
+    });
+};
 
-jive.autowire.one( app, __dirname + '/tiles/samplelist', function() {
-    http.createServer(app).listen(8090, function () {
-        console.log("Express server listening on port 8090");
-    } );
-});
+var q = require('q');
+
+jive.autowire.one( app, __dirname, __dirname + '/tiles/samplelist').then( startServer );

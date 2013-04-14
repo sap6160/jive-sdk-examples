@@ -41,7 +41,7 @@ app.get('/', routes.index);
 
 // start server
 app.on('event:jiveConfigurationComplete', function () {
-    var server = http.createServer(app).listen(app.get('port') || 8090, function () {
+    var server = http.createServer(app).listen( app.get('port') || 8090, function () {
         console.log("Express server listening on port " + server.address().port);
     });
 });
