@@ -1,6 +1,6 @@
 {
     "baseUrl": "http://lt-a7-120000.jiveland.com",
     "port": "8090",
-    "clientId": "766t8osmgixp87ypdbbvmu637k98fzvc",
-    "clientSecret": "hvf7zltbk6tjpkpe83yapsupl4regc.DDKWsHugwN8cp9fNu-C02ylDAVE.1.s"
+    "clientId": "!!!_CHANGE_ME_DO_NOT_START_SERVER_WITH_OUT_A_REAL_ONE_FROM_JIVE!!!",
+    "clientSecret": "!!!_CHANGE_ME_DO_NOT_START_SERVER_WITH_OUT_A_REAL_ONE_FROM_JIVE!!!"
 }
