@@ -46,9 +46,10 @@ var jive = require('jive-sdk');
 
 var configuration = {
     'port' : 8090,
-    'baseUrl' : 'http://lt-a7-120000',
+    'clientUrl' : 'http://lt-a7-120000',
     'clientId' : '766t8osmgixp87ypdbbvmu637k98fzvc',
-    'persistence' : new jive.persistence.file()
+    "clientSecret": "rm93mbrpr8an2eajq439625vzg3xqp.MyvfefMHZlEv4E49WH6AC90cw2U.1.s",
+    'persistence' : new jive.persistence.file()     // optional ??? what are all the options???
 };
 
 jive.config.save( configuration );

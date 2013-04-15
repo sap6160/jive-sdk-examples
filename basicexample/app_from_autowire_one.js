@@ -40,9 +40,9 @@ app.get('/', routes.index);
 
 var jive = require('jive-sdk');
 
-jive.config.save( {
+jive.setup.init( {
     'port' : 8090,
-    'baseUrl' : 'http://lt-a7-120000',
+    'clientUrl' : 'http://lt-a7-120000',
     'clientId' : '766t8osmgixp87ypdbbvmu637k98fzvc'
 } );
 
