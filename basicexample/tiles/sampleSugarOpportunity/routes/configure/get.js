@@ -79,6 +79,6 @@ var loginToSugarCallback = function(res){
 
 //// EXPORTS
 exports.route = function(req, res){
-    var conf = jive.config.fetch();
+    var conf = jive.setup.options;
     res.render('sampleSugarOpportunity/configuration.html', { host: conf.clientUrl + ':' + conf.port  });
 };

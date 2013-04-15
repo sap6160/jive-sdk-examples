@@ -50,7 +50,7 @@ function processTileInstance(instance) {
 exports.task = new jive.tasks.build(
     // runnable
     function() {
-        jive.tiles.findByDefinitionName( 'samplelist' ).execute( function(instances) {
+        jive.tiles.findByDefinitionName( 'samplelist' ).then( function(instances) {
             if ( instances ) {
                 instances.forEach( function( instance ) {
                     processTileInstance(instance);

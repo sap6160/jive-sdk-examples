@@ -68,12 +68,13 @@ var definition = {
     "style" : "LIST",
     "icons" : {
         "16" : "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif",
-        "48" : "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif"
+        "48" : "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif",
+        "128" : "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif"
     }
 };
 
 // save your tile
-jive.tiles.definitions.save(definition).execute( function() {
-    jive.autowire.one( app, __dirname, __dirname + '/tiles/samplenodef').then( startServer );
-} );
+jive.tiles.definitions.save(definition)
+    .then( jive.autowire.one( app, __dirname, __dirname + '/tiles/samplenodef') )
+    .then( startServer );
 

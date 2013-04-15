@@ -21,7 +21,7 @@ var jive = require("jive-sdk");
 exports.task = function(context) {
     var statusNames = [ "Poor", "Fair", "Good", "Excellent", "Outstanding" ];
 
-    jive.tiles.findByDefinitionName( 'samplegauge' ).execute( function(instances) {
+    jive.tiles.findByDefinitionName( 'samplegauge' ).then( function(instances) {
         if ( instances ) {
             instances.forEach( function( instance ) {
                console.log('running pusher for ', instance.name, 'instance', instance.id );

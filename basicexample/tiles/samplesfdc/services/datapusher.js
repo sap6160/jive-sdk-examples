@@ -22,7 +22,7 @@ function processTileInstance(instance) {
 }
 
 exports.task = function() {
-    jive.extstreams.findByDefinitionName( 'samplesfdc' ).execute( function(instances) {
+    jive.extstreams.findByDefinitionName( 'samplesfdc' ).then( function(instances) {
         if ( instances ) {
             instances.forEach( function( instance ) {
                 processTileInstance(instance);

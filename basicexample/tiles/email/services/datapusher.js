@@ -20,7 +20,7 @@ var http = require('http');
 var util = require('util');
 var jive = require("jive-sdk");
 
-var doPush = function( jiveApi, instance, userName, userEmail, subject, body, retried ) {
+var doPush = function( jiveApi, instance, userName, userEmail, subject, body ) {
     body = body.substring( 0, Math.min(400, body.length ) );
 
     var dataToPush = {
@@ -52,10 +52,10 @@ exports.task = new jive.tasks.build(
 
     // runnable
     function(context) {
-    var settings = jive.config.fetch();
+    var settings = jive.setup.options;
     var debug = false;
 
-    jive.extstreams.findByDefinitionName( 'email' ).execute( function(instances) {
+    jive.extstreams.findByDefinitionName( 'email' ).then( function(instances) {
         if ( instances ) {
 
             instances.forEach( function( instance ) {

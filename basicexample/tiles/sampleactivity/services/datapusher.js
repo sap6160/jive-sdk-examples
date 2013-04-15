@@ -19,7 +19,7 @@ var count = 0;
 var jive = require("jive-sdk");
 
 exports.task = function() {
-    jive.extstreams.findByDefinitionName( 'sampleactivity' ).execute( function(instances) {
+    jive.extstreams.findByDefinitionName( 'sampleactivity' ).then( function(instances) {
         if ( instances ) {
             instances.forEach( function( instance ) {
 

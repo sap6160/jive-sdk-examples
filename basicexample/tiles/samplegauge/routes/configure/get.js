@@ -20,6 +20,6 @@ var jive = require("jive-sdk");
  */
 
 exports.route = function(req, res){
-    var conf = jive.config.fetch();
+    var conf = jive.setup.options;
     res.render('samplegauge/configuration.html', { host: conf.clientUrl + ':' + conf.port  });
 };

@@ -47,12 +47,12 @@ var jive = require('jive-sdk');
 var configuration = {
     'port' : 8090,
     'clientUrl' : 'http://lt-a7-120000',
-    'clientId' : '766t8osmgixp87ypdbbvmu637k98fzvc',
+    "clientId": "4mkgdszjkbzfjwgwsjnj0r5q1db9n0fh",
     "clientSecret": "rm93mbrpr8an2eajq439625vzg3xqp.MyvfefMHZlEv4E49WH6AC90cw2U.1.s",
     'persistence' : new jive.persistence.file()     // optional ??? what are all the options???
 };
 
-jive.config.save( configuration );
+jive.setup.init( configuration );
 
 // configuration UI route
 app.get( '/configure', function( req, res ) {
@@ -83,7 +83,8 @@ var definition = {
     "style": "TABLE",
     "icons": {
         "16": "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif",
-        "48": "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif"
+        "48": "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif",
+        "128": "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif"
     }
 };
 
@@ -92,14 +93,14 @@ var pushedDataEventHandler = function(instance) {
 };
 
 // save your tile
-jive.tiles.definitions.save(definition).execute();
+jive.tiles.definitions.save(definition);
 
 // add event handlers
 jive.tiles.definitions.addEventHandler( definition['name'], 'dataPushed', pushedDataEventHandler );
 
 // schedule a simple data pusher task
 jive.tasks.schedule( function() {
-    jive.tiles.findByDefinitionName( definition['name'] ).execute( function(instances) {
+    jive.tiles.findByDefinitionName( definition['name'] ).then( function(instances) {
         instances.forEach( function( instance ) {
             var dataToPush = {
                 "data":
