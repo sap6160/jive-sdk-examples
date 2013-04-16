@@ -34,36 +34,53 @@ app.configure('development', function () {
     app.use(express.errorHandler());
 });
 app.get('/', routes.index);
-
-http.createServer(app).listen(8090, function () {
-    console.log("Express server listening on port 8090");
+var httpPort = 8090;
+http.createServer(app).listen(httpPort, function () {
+    console.log("Express server listening on port " + httpPort);
 } );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Setup your service
 
+// Require the Jive SDK API
 var jive = require('jive-sdk');
 
+// Specify service setup parameters
 jive.service.options = {
-    'port' : 8090,
+    // the service needs to know what http port node is listening on
+    'port' : httpPort,
+    // this should be the publically available base URL for your service
     'clientUrl' : 'http://lt-a7-120000',
+    // acquire a clientID and secret from Jive Software
     "clientId": "4mkgdszjkbzfjwgwsjnj0r5q1db9n0fh",
     "clientSecret": "rm93mbrpr8an2eajq439625vzg3xqp.MyvfefMHZlEv4E49WH6AC90cw2U.1.s"
 };
 
-// configuration UI route
+//
+// TILE ROUTE CONFIGURATION
+// A purposeful places integration using Tiles requires at minimum 2 publically available endpoints, for
+// (1) serving the configuration UI for your tile, visible on the Jive instance, and
+// (2) accepting tile instance registrations on your service.
+
+// Setup the tile configuration UI route at [clientUrl]:[port]/configure (eg. http://yoursite:8090/configure):
 app.get( '/configure', function( req, res ) {
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.end( "<script>jive.tile.onOpen(function() { jive.tile.close({'config':'value'});});</script>" );
 } );
 
-// registration route -- defer to built in one
+// Setup the tile registration route at [clientUrl]:[port]/registration (eg. http://yoursite:8090/registration):
 app.post( '/registration', jive.routes.registration );
 
-// setup useful dev endpoints to show what tiles are available on your service; for installing tiles on a jive instance
+// For development, you may also setup useful dev endpoints to show what tiles are available on your service;
+// for installing tiles on a jive instance
 app.get( '/tiles', jive.routes.tiles );
 app.get( '/tilesInstall', jive.routes.installTiles );
 
+//
+// Your tile must also declare metadata about itself, permitting the Jive instance to discover
+// what type of type style it is, icons, and also the aforementioned required endpoints (configuration
+// and registration).
+//
 var definition = {
     "sampleData": {"title": "Account Details",
         "contents": [
@@ -85,17 +102,11 @@ var definition = {
     }
 };
 
-var pushedDataEventHandler = function(instance) {
-    console.log( instance, "pushed data");
-};
-
-// save your tile
+// Make this definition known to your service by calling the .save function as demonstrated below:
 jive.tiles.definitions.save(definition);
 
-// add event handlers
-jive.tiles.definitions.addEventHandler( definition['name'], 'dataPushed', pushedDataEventHandler );
-
-// schedule a simple data pusher task
+// If your service must periodically push data to a Jive instance, you may schedule a task,
+// and use it to periodically scan any registered tile instances, and push data into them.
 jive.tasks.schedule( function() {
     jive.tiles.findByDefinitionName( definition['name'] ).then( function(instances) {
         instances.forEach( function( instance ) {
@@ -116,3 +127,10 @@ jive.tasks.schedule( function() {
         } );
     });
 });
+
+
+// If your service needs special handling for events such as data push back into Jive, you
+// may register callbacks for specific definitions.
+jive.tiles.definitions.addEventHandler( definition['name'], 'dataPushed', function(instance) {
+    console.log( instance, "pushed data");
+} );
