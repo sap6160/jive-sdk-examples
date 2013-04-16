@@ -59,7 +59,5 @@ jive.service.init(app)
     .then( function() { return jive.service.autowire() } )
     // start the service
     .then( function() { return jive.service.start() } )
-    // if successful service start, start the http server
-    .then( startServer )
-    // otherwise fail
-    .fail( failServer );
+    // if successful service start, start the http server; otherwise fail
+    .then( startServer, failServer );

@@ -63,15 +63,10 @@ jive.service.init(app,
         'clientId'      : '4mkgdszjkbzfjwgwsjnj0r5q1db9n0fh',
         'clientSecret'  : 'rm93mbrpr8an2eajq439625vzg3xqp.MyvfefMHZlEv4E49WH6AC90cw2U.1.s'
     })
-    // autowire sample list
+    // autowire sample list, gauge, and activity
     .then( function() { return jive.service.autowireDefinition('samplelist') } )
-    // autowire sample gauge
     .then( function() { return jive.service.autowireDefinition('samplegauge') } )
-    // autowire sample activity
     .then( function() { return jive.service.autowireDefinition('sampleactivity') } )
-    // start the service
     .then( function() { return jive.service.start() } )
-    // if successful service start, start the http server
-    .then( startServer )
-    // otherwise fail
-    .fail( failServer);
+    // if successful service start, start the http server; otherwise fail
+    .then( startServer, failServer);
