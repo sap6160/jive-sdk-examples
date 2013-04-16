@@ -43,6 +43,14 @@ app.get('/', routes.index);
 var jive = require('jive-sdk');
 
 var startServer = function () {
+
+    // start a task immediately after server startup
+    var start = new Date().getTime();
+
+    jive.tiles.definitions.addTasks( new jive.tasks.build( function() {
+        console.log( ( (new Date().getTime() - start ) / 1000 ) + " seconds since start...");
+    }, 5000));
+
     var server = http.createServer(app).listen( app.get('port') || 8090, function () {
         console.log("Express server listening on port " + server.address().port);
     });
@@ -73,16 +81,20 @@ var definition = {
     }
 };
 
+var definitionName = definition['name'];
+
 // save your tile
 jive.tiles.definitions.save(definition)
     // initialize the service with startup parameters from default [app dir]/jiveclientconfiguration.json
     .then( function() { return jive.service.init(app); } )
-    // autowire the samplenodef
-    .then( function() { return jive.service.autowireDefinition( 'sampleroutesonly'); } )
+    // autowire general services to the definition
+    .then( function() { return jive.service.autowireDefinitionServices( definitionName, 'services' ); } )
+    // autowire general routes to the definition
+    .then( function() { return jive.service.autowireDefinitionRoutes( definitionName, 'routes' ); } )
     // start the service
     .then( function() { return jive.service.start(); } )
     // on success, start the http server
-    .then( startServer)
+    .then( startServer )
     // on fail, system exit
     .fail( function(e) {
         console.log("Failed to start!", e );
