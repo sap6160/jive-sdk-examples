@@ -73,9 +73,9 @@ jive.service.init(app)
 // Below is an explanation of each step in the above sequence successful.
 
 /*
-===============
-1. Service Init
-===============
+====================
+Step 1. Service Init
+====================
 
 jive.service.init() must at minimum be called with an app, as the framework will use that to 
 prepare the express app.
@@ -90,9 +90,9 @@ node called config (eg. config=/path/to/my.json), or an environment variable (eg
 If neither are present, the system will assume that a file [app root]/jiveclientconfiguration.json] exists, and
 will try to parse that file for options.
 
-=============
-2. AUTOWIRING
-=============
+==================
+Step 2. Autowiring
+==================
 
 Once jive.service.init() completes, the next promise in the chain above is jive.service.autowire(), which
 will inspect your system for tiles and external stream definitions in [app root]/tiles, and automatically try to 
@@ -234,9 +234,9 @@ endpoint is in the format expected by the jivelinks API.
 (3) Any paths containing {{{host}}} will have that value substituted with the value of clientUrl from your
     configuration file
 
- ================
- 3. START SERVICE
- ================
+=====================
+Step 3. START SERVICE
+=====================
  The final link in the promise chain is jive.service.start(), which performs the following:
  - Prepares the express app based passed in the first step, .init() above, adding globally available
    endpoints such as:
