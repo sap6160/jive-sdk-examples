@@ -52,7 +52,7 @@ var q = require('q');
 
 var definition = {
     "sampleData" : {
-        "title" : "Sample tile with no autowired defintion",
+        "title" : "Manually wired defintion",
         "contents" : [ {
             "text" : "Initial data"
         } ],
@@ -60,11 +60,11 @@ var definition = {
             "listStyle" : "contentList"
         }
     },
-    "config": "/samplenodef/configure",
+    "config": "/sampleroutesonly/configure",
     "register": "/registration",
-    "displayName" : "Sample Manual Definition",
-    "name" : "samplenodef",
-    "description" : "Sample tile with no autowired defintion.",
+    "displayName" : "Manually wired defintion",
+    "name" : "sampleroutesonly",
+    "description" : "Manually wired defintion",
     "style" : "LIST",
     "icons" : {
         "16" : "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif",
@@ -78,7 +78,7 @@ jive.tiles.definitions.save(definition)
     // initialize the service with startup parameters from default [app dir]/jiveclientconfiguration.json
     .then( function() { return jive.service.init(app); } )
     // autowire the samplenodef
-    .then( function() { return jive.service.autowireDefinition( 'samplenodef'); } )
+    .then( function() { return jive.service.autowireDefinition( 'sampleroutesonly'); } )
     // start the service
     .then( function() { return jive.service.start(); } )
     // on success, start the http server
