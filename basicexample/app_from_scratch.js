@@ -44,15 +44,12 @@ http.createServer(app).listen(8090, function () {
 
 var jive = require('jive-sdk');
 
-var configuration = {
+jive.service.options = {
     'port' : 8090,
     'clientUrl' : 'http://lt-a7-120000',
     "clientId": "4mkgdszjkbzfjwgwsjnj0r5q1db9n0fh",
-    "clientSecret": "rm93mbrpr8an2eajq439625vzg3xqp.MyvfefMHZlEv4E49WH6AC90cw2U.1.s",
-    'persistence' : new jive.persistence.file()     // optional ??? what are all the options???
+    "clientSecret": "rm93mbrpr8an2eajq439625vzg3xqp.MyvfefMHZlEv4E49WH6AC90cw2U.1.s"
 };
-
-jive.setup.init( configuration );
 
 // configuration UI route
 app.get( '/configure', function( req, res ) {
@@ -63,7 +60,7 @@ app.get( '/configure', function( req, res ) {
 // registration route -- defer to built in one
 app.post( '/registration', jive.routes.registration );
 
-// setup a useful endpoint to show what tiles are available on your service
+// setup useful dev endpoints to show what tiles are available on your service; for installing tiles on a jive instance
 app.get( '/tiles', jive.routes.tiles );
 app.get( '/tilesInstall', jive.routes.installTiles );
 
@@ -119,4 +116,3 @@ jive.tasks.schedule( function() {
         } );
     });
 });
-

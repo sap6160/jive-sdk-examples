@@ -76,11 +76,11 @@ var definition = {
 // save your tile
 jive.tiles.definitions.save(definition)
     // initialize the service with startup parameters from default [app dir]/jiveclientconfiguration.json
-    .then( jive.service.init(app) )
+    .then( function() { return jive.service.init(app); } )
     // autowire the samplenodef
-    .then( jive.service.autowireDefinition( 'samplenodef') )
+    .then( function() { return jive.service.autowireDefinition( 'samplenodef'); } )
     // start the service
-    .then( jive.service.start() )
+    .then( function() { return jive.service.start(); } )
     // on success, start the http server
     .then( startServer)
     // on fail, system exit
