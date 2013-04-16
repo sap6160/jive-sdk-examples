@@ -40,11 +40,10 @@ app.get('/', routes.index);
 
 var jive = require('jive-sdk');
 
-jive.setup.init( {
-    'port' : 8090,
-    'clientUrl' : 'http://lt-a7-120000',
-    'clientId' : '766t8osmgixp87ypdbbvmu637k98fzvc'
-} );
+var failServer = function(reason) {
+    console.log("Error", reason );
+    process.exit(-1);
+};
 
 var startServer = function () {
     var server = http.createServer(app).listen( app.get('port') || 8090, function () {
@@ -52,6 +51,23 @@ var startServer = function () {
     });
 };
 
-var q = require('q');
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Kick off service start sequence
 
-jive.autowire.one( app, __dirname, __dirname + '/tiles/samplelist').then( startServer );
+// initialize service setup
+jive.service.init(app,
+    // manually supply configuration
+    {
+        'port'          : 8090,
+        'clientUrl'     : 'http://lt-a7-120000',
+        'clientId'      : '4mkgdszjkbzfjwgwsjnj0r5q1db9n0fh',
+        'clientSecret'  : 'rm93mbrpr8an2eajq439625vzg3xqp.MyvfefMHZlEv4E49WH6AC90cw2U.1.s'
+    })
+    // autowire a particular tile
+    .then( function() { return jive.service.autowireDefinition('samplelist') } )
+    // start the service
+    .then( function() { return jive.service.start() } )
+    // if successful service start, start the http server
+    .then( startServer )
+    // otherwise fail
+    .fail( failServer);

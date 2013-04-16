@@ -19,6 +19,6 @@ var jive = require('jive-sdk');
  * GET home page.
  */
 exports.route = function(req, res){
-    var conf = jive.setup.options;
+    var conf = jive.service.options;
     res.render('email/configuration.html', { host: conf.clientUrl + ':' + conf.port  });
 };

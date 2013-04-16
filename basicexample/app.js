@@ -39,17 +39,27 @@ app.get('/', routes.index);
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Setup jive
 
-// start server
-app.on('event:jiveConfigurationComplete', function () {
+var failServer = function(reason) {
+    console.log("Error", reason );
+    process.exit(-1);
+};
+
+var startServer = function () {
     var server = http.createServer(app).listen( app.get('port') || 8090, function () {
         console.log("Express server listening on port " + server.address().port);
     });
-});
+};
 
-// fail server startup
-app.on('event:jiveConfigurationFailed', function(reason) {
-    throw reason ? reason : "Startup aborted.";
-} );
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// Kick off service start sequence
 
-// Kick off server start sequence
-jive.autowire.all(app, __dirname );
+// initialize service setup
+jive.service.init(app)
+    // autowire all available definitions
+    .then( function() { return jive.service.autowire() } )
+    // start the service
+    .then( function() { return jive.service.start() } )
+    // if successful service start, start the http server
+    .then( startServer )
+    // otherwise fail
+    .fail( failServer );

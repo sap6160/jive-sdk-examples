@@ -52,7 +52,7 @@ exports.task = new jive.tasks.build(
 
     // runnable
     function(context) {
-    var settings = jive.setup.options;
+    var settings = jive.service.options;
     var debug = false;
 
     jive.extstreams.findByDefinitionName( 'email' ).then( function(instances) {

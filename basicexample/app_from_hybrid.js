@@ -75,6 +75,17 @@ var definition = {
 
 // save your tile
 jive.tiles.definitions.save(definition)
-    .then( jive.autowire.one( app, __dirname, __dirname + '/tiles/samplenodef') )
-    .then( startServer );
+    // initialize the service
+    .then( jive.service.init(app) )
+    // autowire the samplenodef
+    .then( jive.service.autowireDefinition( 'samplenodef') )
+    // start the service
+    .then( jive.service.start() )
+    // on success, start the http server
+    .then( startServer)
+    // on fail, system exit
+    .fail( function(e) {
+        console.log("Failed to start!", e );
+        process.exit();
+    });
 
