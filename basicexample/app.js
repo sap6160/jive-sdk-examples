@@ -40,7 +40,7 @@ app.get('/', routes.index);
 // Setup jive
 
 var failServer = function(reason) {
-    console.log("Error", reason );
+    console.log('FATAL -', reason );
     process.exit(-1);
 };
 
@@ -60,4 +60,5 @@ jive.service.init(app)
     // start the service
     .then( function() { return jive.service.start() } )
     // if successful service start, start the http server; otherwise fail
-    .then( startServer, failServer );
+    .then( startServer, failServer )
+    .done();

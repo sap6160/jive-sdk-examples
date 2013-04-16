@@ -45,8 +45,10 @@ var failServer = function(reason) {
     process.exit(-1);
 };
 
+var serverPort = 8090;
+
 var startServer = function () {
-    var server = http.createServer(app).listen( app.get('port') || 8090, function () {
+    var server = http.createServer(app).listen( serverPort, function () {
         console.log("Express server listening on port " + server.address().port);
     });
 };
@@ -58,7 +60,7 @@ var startServer = function () {
 jive.service.init(app,
     // manually supply service startup parameters
     {
-        'port'          : 8090,
+        'port'          : serverPort,
         'clientUrl'     : 'http://lt-a7-120000',
         'clientId'      : '4mkgdszjkbzfjwgwsjnj0r5q1db9n0fh',
         'clientSecret'  : 'rm93mbrpr8an2eajq439625vzg3xqp.MyvfefMHZlEv4E49WH6AC90cw2U.1.s'
