@@ -15,9 +15,7 @@
  */
 
 /**
- * Demonstates how to mix and match manual service wiring, with framework autowiring.
- * In this usecase we manually define the definition, but rely on autowiring
- * to set up the tile routes.
+ * EXAMPLE: Demonstates how to mix and match manual service wiring, with framework autowiring.
  */
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,10 +38,10 @@ app.get('/', routes.index);
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Setup your service
 
+var q = require('q');
 var jive = require('jive-sdk');
 
 var startServer = function () {
-
     // start a task immediately after server startup
     var start = new Date().getTime();
 
@@ -56,7 +54,6 @@ var startServer = function () {
     });
 };
 
-var q = require('q');
 
 var definition = {
     "sampleData" : {
@@ -87,16 +84,14 @@ var definitionName = definition['name'];
 jive.tiles.definitions.save(definition)
     // initialize the service with startup parameters from default [app dir]/jiveclientconfiguration.json
     .then( function() { return jive.service.init(app); } )
-    // autowire general services to the definition
+    // autowire shared services to the definition
     .then( function() { return jive.service.autowireDefinitionServices( definitionName, 'services' ); } )
-    // autowire general routes to the definition
+    // autowire shared routes to the definition
     .then( function() { return jive.service.autowireDefinitionRoutes( definitionName, 'routes' ); } )
     // start the service
     .then( function() { return jive.service.start(); } )
-    // on success, start the http server
-    .then( startServer )
-    // on fail, system exit
-    .fail( function(e) {
+    // on success, start the http server; exit on fail
+    .then( startServer, function(e) {
         console.log("Failed to start!", e );
         process.exit();
     });

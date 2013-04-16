@@ -15,7 +15,7 @@
  */
 
 /**
- * Demonstates how to kick off service autowiring just one tile directory.
+ * EXAMPLE: Demonstates how to kick off service autowiring just one or two tile definitions.
  */
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

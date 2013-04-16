@@ -15,7 +15,7 @@
  */
 
 /**
- * Demonstates how to manually configure a tile (no autowiring).
+ * EXAMPLE: Demonstates how to manually configure a tile (no autowiring).
  */
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

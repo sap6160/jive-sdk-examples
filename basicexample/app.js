@@ -15,7 +15,7 @@
  */
 
 /**
- * Demonstates how to kick off service autowiring a directory of tiles.
+ * EXAMPLE: Demonstates how to kick off service autowiring a directory of tiles.
  */
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
