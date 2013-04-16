@@ -55,7 +55,7 @@ var startServer = function () {
 
 // initialize service setup
 jive.service.init(app)
-    // autowire all available definitions
+    // autowire all available definitions in /tiles
     .then( function() { return jive.service.autowire() } )
     // start the service
     .then( function() { return jive.service.start() } )
