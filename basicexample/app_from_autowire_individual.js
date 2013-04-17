@@ -22,18 +22,9 @@
 // Setup express
 
 var express = require('express'),
-    routes = require('./routes'),
     http = require('http');
 
 var app = express();
-app.use(express.bodyParser());
-app.use(express.logger('dev'));
-app.use(express.methodOverride());
-app.use(app.router);
-app.configure('development', function () {
-    app.use(express.errorHandler());
-});
-app.get('/', routes.index);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Setup your service

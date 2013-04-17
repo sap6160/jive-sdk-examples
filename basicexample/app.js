@@ -22,19 +22,10 @@
 // Setup express
 
 var express = require('express'),
-    routes = require('./routes'),
     http = require('http'),
     jive = require('jive-sdk');
 
 var app = express();
-app.use(express.bodyParser());
-app.use(express.logger('dev'));
-app.use(express.methodOverride());
-app.use(app.router);
-app.configure('development', function () {
-    app.use(express.errorHandler());
-});
-app.get('/', routes.index);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Setup jive
@@ -77,12 +68,12 @@ jive.service.init(app)
 Step 1. Service Init
 ====================
 
-jive.service.init() must at minimum be called with an app, as the framework will use that to 
+jive.service.init() must at minimum be called with an app, as the framework will use that to
 prepare the express app.
 
 A second argument (omitted above) can be provided, which can be either (1) the JSON for the options
 required to start the service (clientId, clientSecret, clientUrl), or the location of a JSON
-file containing those setup options. 
+file containing those setup options.
 
 If no 2nd argument is provided, then the system will try to locate a command line parameter to
 node called config (eg. config=/path/to/my.json), or an environment variable (eg. CONFIG_FILE=/path/to/my.json).
@@ -95,7 +86,7 @@ Step 2. Autowiring
 ==================
 
 Once jive.service.init() completes, the next promise in the chain above is jive.service.autowire(), which
-will inspect your system for tiles and external stream definitions in [app root]/tiles, and automatically try to 
+will inspect your system for tiles and external stream definitions in [app root]/tiles, and automatically try to
 discover definition JSON, routes, tasks, and event handlers that are placed there in expected locations.
 
 The .autowire() assumes the following directory structure exists:
@@ -110,7 +101,7 @@ The .autowire() assumes the following directory structure exists:
                 definition.json (optional)
 
 Regarding the /routes directory:
-================================
+--------------------------------
 The system will recursively search for .js files exporting either a function(req, res), or
 a routes datastructure, and construct a route based on the path in the directory, for the
 associated tile. You should refer to these routes in your definition.json (eg. the "configure"
@@ -181,7 +172,7 @@ The following path will be autowired:
 As with the autowire by verb file example above, you should reference these routes in your definition.json.
 
 Regarding the services directory:
-=================================
+--------------------------------
 The system will search for .js files in this directory, and look for event handler and task exports.
 
 (1) Event Handlers
@@ -216,7 +207,7 @@ This will schedule a task based on the function in either statement to execute e
 (default for a plain function), or the interval specified in the task (5 seconds in the provided example).
 
 Regarding definition.json:
-=========================
+-------------------------
 If a definition.json file is located in a tile directory (for example /samplelist/definition.json), the system
 will call either jive.tile.definitions or jive.extstreams.definitions .save(), based on the "style" attribute
 in this json structure. If style is "ACTIVITY", jive.extstreams.definitions.save() will be called; otherwise
