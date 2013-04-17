@@ -92,13 +92,14 @@ discover definition JSON, routes, tasks, and event handlers that are placed ther
 The .autowire() assumes the following directory structure exists:
 [app root]/tiles
             /tile1
-                /routes (optional)
-                    /config
-                    get.js
-                /services (optional)
-                    datapusher.js
-                    lifecycle.js
-                definition.json (optional)
+                /backend
+                    /routes (optional)
+                        /config
+                        get.js
+                    /services (optional)
+                        datapusher.js
+                        lifecycle.js
+                    definition.json (optional)
 
 Regarding the /routes directory:
 --------------------------------
@@ -119,9 +120,10 @@ based on the directory path. For example:
 
             ..
             /samplelist
-                /routes
-                    /config
-                    get.js
+                /backend
+                    /routes
+                        /config
+                        get.js
 
 Assuming that /samplelist/routes/config/get.js contains the following:
 
@@ -152,7 +154,7 @@ For example:
                 'route': function(res,req) { .. }
             };
 
-Assuming that this export lives in /samplelist/routes/prod/extra/routes.js, the following route will be automatically
+Assuming that this export lives in /samplelist/backend/routes/prod/extra/routes.js, the following route will be automatically
 created:
 
             GET /samplelist/prod/extra/mypath
@@ -183,7 +185,7 @@ If you have a file that exports an .eventHandlers array property, the system wil
 on each of the object elements.
 For example:
 
-If in /samplelist/services/lifecycle.js this existed:
+If in /samplelist/backend/services/lifecycle.js this existed:
 
         exports.eventHandlers = [
          { 'event': 'destroyingInstance',
@@ -200,7 +202,7 @@ whenever an instance of samplelist is destroyed.
 If you have a file that exports a .task property, the system will call jive.definitions.addTasks( .. ) on that
 object, which can be either a task object (see jive-sdk/lib/task.js) or a function.
 
-If in /samplelist/services/datapusher.js this existed:
+If in /samplelist/backend/services/datapusher.js this existed:
 
      exports.task = function() { .. }
              - or -

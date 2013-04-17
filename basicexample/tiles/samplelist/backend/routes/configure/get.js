@@ -14,6 +14,9 @@
  *    limitations under the License.
  */
 
+var jive = require("jive-sdk");
+
 exports.route = function(req, res){
-    res.render('samplelist/action.html');
+    var conf = jive.service.options;
+    res.render('configuration.html', { host: conf.clientUrl + ':' + conf.port  });
 };

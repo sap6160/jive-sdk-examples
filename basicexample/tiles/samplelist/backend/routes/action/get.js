@@ -17,6 +17,5 @@
 var jive = require("jive-sdk");
 
 exports.route = function(req, res){
-    var conf = jive.service.options;
-    res.render('samplesfdc/configuration.html', { host: conf.clientUrl + ':' + conf.port  });
+    res.render('action.html');
 };

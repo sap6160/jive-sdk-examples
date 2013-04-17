@@ -1,7 +1,3 @@
-
-
-
-
 /*
  * Copyright 2013 Jive Software
  *
@@ -18,10 +14,9 @@
  *    limitations under the License.
  */
 
-
-
-//todo: add the crypto handling here
+var jive = require("jive-sdk");
 
 exports.route = function(req, res){
-    res.render('index', { title: 'You are posting stuff ' });
+    var conf = jive.service.options;
+    res.render('configuration.html', { host: conf.clientUrl + ':' + conf.port  });
 };
