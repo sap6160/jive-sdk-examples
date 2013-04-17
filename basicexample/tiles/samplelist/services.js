@@ -62,3 +62,35 @@ exports.task = new jive.tasks.build(
     // interval (optional)
     5000
 );
+
+exports.eventHandlers = [
+
+    {
+        'event': 'newInstance',
+        'handler' : function(theInstance){
+            // override
+        }
+    },
+
+    {
+        'event': 'destroyingInstance',
+        'handler' : function(theInstance){
+            // override
+        }
+    },
+
+    {
+        'event': 'destroyedInstance',
+        'handler' : function(theInstance){
+            // override
+        }
+    },
+
+    {
+        'event': 'dataPushed',
+        'handler' : function(theInstance, pushedData, response){
+            // override
+        }
+    }
+
+];
