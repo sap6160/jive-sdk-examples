@@ -1,30 +1,20 @@
 {
     "sampleData" : {
-        "title" : "SFDC Example",
+        "title" : "Sample List samplesfdc",
         "contents" : [ {
-            "text" : "Size: $100,000",
-            "icon" : "http://cdn1.iconfinder.com/data/icons/free-business-desktop-icons/128/Calculator.png",
-            "linkDescription" : "Monetary value of this account."
+            "text" : "Item 1"
         }, {
-            "text" : "Start Date: 1/5/2013",
-            "icon" : "http://cdn1.iconfinder.com/data/icons/free-business-desktop-icons/128/Calculator.png",
-            "linkDescription" : "Date when this account was opened."
+            "text" : "Item 2"
         }, {
-            "text" : "Territory: Alaska",
-            "icon" : "http://cdn1.iconfinder.com/data/icons/free-business-desktop-icons/128/Calculator.png",
-            "linkDescription" : "Area affected by this account."
+            "text" : "Item 3"
         } ],
         "config" : {
-               "listStyle" : "contentList"
-        },
-        "action" : {
-            "text" : "Action Link",
-            "context" : { "test" : "data" }
+            "listStyle" : "contentList"
         }
     },
-    "displayName" : "SFDC OAuth2 Example",
+    "displayName" : "Tile samplesfdc",
     "name" : "samplesfdc",
-    "description" : "SFDC OAuth2 Example",
+    "description" : "samplesfdc",
     "style" : "LIST",
     "icons" : {
         "16" : "http://i.cdn.turner.com/cnn/.e/img/3.0/global/header/hdr-main.gif",
