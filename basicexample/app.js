@@ -103,7 +103,7 @@ The .autowire() assumes the following directory structure exists:
 
 Regarding the /routes directory:
 --------------------------------
-The system will recursively search for .js files exporting either a function(req, res), or
+The system will recursively search /backend for .js files exporting either a function(req, res), or
 a routes datastructure, and construct a route based on the path in the directory, for the
 associated tile. You should refer to these routes in your definition.json (eg. the "configure"
 and "register" attributes for example), so that a Jive instance receiving the definition for your
