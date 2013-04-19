@@ -47,17 +47,12 @@ var startServer = function () {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Kick off service start sequence
 
+var foo = {};
+
 // initialize service setup
-jive.service.init(app,
-    // manually supply service startup parameters
-    {
-        'port'          : serverPort,
-        'clientUrl'     : 'http://lt-a7-120000',
-        'clientId'      : '4mkgdszjkbzfjwgwsjnj0r5q1db9n0fh',
-        'clientSecret'  : 'rm93mbrpr8an2eajq439625vzg3xqp.MyvfefMHZlEv4E49WH6AC90cw2U.1.s'
-    })
+jive.service.init(app )
     // autowire 2 definitions in /tiles
-    .then( function() { return jive.service.autowire( [ 'samplelist', 'samplegauge'] ) } )
+    .then( function() { return jive.service.autowire( [ 'samplesfdc'] ) } )
     // try to start up service
     .then( function() { return jive.service.start() } )
     // if successful service start, start the http server; otherwise fail

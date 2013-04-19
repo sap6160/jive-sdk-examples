@@ -1,0 +1,50 @@
+
+
+var count = 0;
+var jive = require("jive-sdk");
+
+function processTileInstance(instance) {
+    console.log('running pusher for ', instance.name, 'instance', instance.id);
+
+    count++;
+
+    var dataToPush = {
+        data: {
+            "title": "Simple Counter",
+            "contents": [
+                {
+                    "text": "Selected: " + instance['setup']['opportunityID'],
+                    "icon": "http://farm4.staticflickr.com/3136/5870956230_2d272d31fd_z.jpg",
+                    "linkDescription": "Current counter."
+                }
+            ],
+            "config": {
+                "listStyle": "contentList"
+            },
+            "action": {
+                "text": "Add a Todo",
+                "context": {
+                    "mode": "add"
+                }
+            }
+        }
+    };
+
+    jive.tiles.pushData(instance, dataToPush);
+}
+
+exports.task = new jive.tasks.build(
+    // runnable
+    function() {
+        jive.tiles.findByDefinitionName( 'samplesfdc' ).then( function(instances) {
+            if ( instances ) {
+                instances.forEach( function( instance ) {
+                    processTileInstance(instance);
+                });
+            }
+        });
+    },
+
+    // interval (optional)
+    5000
+);
