@@ -36,18 +36,14 @@ var failServer = function(reason) {
     process.exit(-1);
 };
 
-var serverPort = 8090;
-
 var startServer = function () {
-    var server = http.createServer(app).listen( serverPort, function () {
+    var server = http.createServer(app).listen( app.get('port') || 8090, function () {
         console.log("Express server listening on port " + server.address().port);
     });
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Kick off service start sequence
-
-var foo = {};
 
 // initialize service setup
 jive.service.init(app )
