@@ -1,4 +1,3 @@
-
 var url = require('url');
 var jive = require('jive-sdk');
 
@@ -23,17 +22,25 @@ exports.handleSfdcQuery = function(req, res ) {
             };
 
             jive.util.buildRequest(
-
                 host + "/services/data/v20.0/query?q=" + encodeURIComponent( query ),
                 'GET',
                 null,
                 headers
-            ).execute( function(response) {
-                var body = response['entity'];
+            ).then(
+                // success
+                function(response) {
+                    var body = response['entity'];
 
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify(body) );
-            });
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify(body) );
+                },
+
+                // fail
+                function(response) {
+                    res.writeHead(response.statusCode, { 'Content-Type': 'application/json' });
+                    res.end(response['entity']);
+                }
+            );
         }
     });
 

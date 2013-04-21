@@ -1,5 +1,3 @@
-
-
 var count = 0;
 var jive = require("jive-sdk");
 
