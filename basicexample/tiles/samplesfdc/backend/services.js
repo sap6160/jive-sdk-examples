@@ -4,7 +4,7 @@ var count = 0;
 var jive = require("jive-sdk");
 
 function processTileInstance(instance) {
-    console.log('running pusher for ', instance.name, 'instance', instance.id);
+    jive.logger.debug('running pusher for ', instance.name, 'instance', instance.id);
 
     count++;
 
