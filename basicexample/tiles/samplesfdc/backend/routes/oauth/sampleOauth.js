@@ -7,7 +7,7 @@ var myOauth = Object.create(sdkInstance);
 
 module.exports = myOauth;
 
-var tokenStore = new jive.persistence.file();
+var tokenStore = jive.service.persistence();
 
 /////////////////////////////////////////////////////////////
 // overrides jive-sdk/routes/oauth.js to do something useful,
