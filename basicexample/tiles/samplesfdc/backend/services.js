@@ -28,7 +28,11 @@ function processTileInstance(instance) {
         }
     };
 
-    jive.tiles.pushData(instance, dataToPush);
+    jive.tiles.pushData(instance, dataToPush).then(function(e){
+        console.log('*success*');
+    }, function(e) {
+        console.log('*err*');
+    });
 }
 
 exports.task = new jive.tasks.build(
