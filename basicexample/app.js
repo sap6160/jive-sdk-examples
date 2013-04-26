@@ -137,7 +137,7 @@ You may then safely reference this route in your definition.json:
 
             {
              ..
-                 "config": "/samplelist/configure",
+                 "config": "/samplelist/config",
              ..
             }
 
