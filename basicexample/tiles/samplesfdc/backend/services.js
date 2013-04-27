@@ -11,7 +11,7 @@ function processTileInstance(instance) {
             "title": "Simple Counter",
             "contents": [
                 {
-                    "text": "Selected: " + instance['setup']['opportunityID'],
+                    "text": "Selected: " + instance['config']['opportunityID'],
                     "icon": "http://farm4.staticflickr.com/3136/5870956230_2d272d31fd_z.jpg",
                     "linkDescription": "Current counter."
                 }
