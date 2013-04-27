@@ -48,7 +48,7 @@ var startServer = function () {
 // initialize service setup
 jive.service.init(app )
     // autowire 2 definitions in /tiles
-    .then( function() { return jive.service.autowire( [ 'samplesfdc'] ) } )
+    .then( function() { return jive.service.autowire( [ 'samplegoogle'] ) } )
     // try to start up service
     .then( function() { return jive.service.start() } )
     // if successful service start, start the http server; otherwise fail
