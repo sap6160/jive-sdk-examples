@@ -54,7 +54,14 @@ exports.task = function() {
                     }
                 };
 
-                jive.extstreams.pushActivity(instance, dataToPush);
+                jive.extstreams.pushActivity(instance, dataToPush).then( function()  {
+                    jive.extstreams.setExternalProps( instance, {
+                        "foo":"bar"
+                    }).then( function (p) {
+
+                            console.log(p);
+                        });
+                });
             });
         }
     });
