@@ -27,7 +27,7 @@ exports.route = function (req, res) {
 
         }).then(function () { //After creating 5 comments...
 
-            return jive.extstreams.fetchAllCommentsForExtstream(extstream, ['resources', 'content', 'type'], 10);
+            return jive.extstreams.fetchAllCommentsForExtstream(extstream, ['resources', 'content', 'type'], 10, 'JIVE');
 
         }).then(function (response) {
             var commentsList = response.entity;
@@ -38,7 +38,7 @@ exports.route = function (req, res) {
 
         }).catch(function (err) {
             res.writeHead(500, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify({'Success': false, 'error': err, 'stacktrace': (err.stack ? err.stack : undefined)},
+            res.end(JSON.stringify({'Success': false, 'error': err, 'stacktrace': err.stack },
                 null, '\t'));
         });
 

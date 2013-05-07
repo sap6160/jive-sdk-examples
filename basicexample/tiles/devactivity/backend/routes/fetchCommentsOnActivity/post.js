@@ -27,12 +27,14 @@ exports.route = function (req, res) {
 
         }).then(function () { //After creating 5 comments...
 
-            return jive.extstreams.fetchCommentsOnActivity(activity, ['resources', 'content', 'type'], 10);
+            return jive.extstreams.fetchCommentsOnActivity(activity, ['resources', 'content', 'type'], 10, 'EXTERNAL');
+
         }).then(function (response) {
             var commentsList = response.entity;
 
             res.writeHead(201, {'Content-Type': 'application/json'});
 
+            // Not testing this until paginated lists are fixed to have URL's for the API Gateway!
 //            return actOnComments(commentsList, function(c) {
 //                res.write(JSON.stringify(c, null, '  '));
 //            });
