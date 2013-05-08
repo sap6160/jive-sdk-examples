@@ -27,7 +27,13 @@ exports.route = function (req, res) {
 
         }).then(function () { //After creating 5 comments...
 
-            return jive.extstreams.fetchCommentsOnActivity(activity, ['resources', 'content', 'type'], 10, 'EXTERNAL');
+            var opts = {
+                "fieldList": ['resources', 'content', 'type'],
+                "itemsPerPage": 10,
+                "commentSourceType": "EXTERNAL"
+            };
+
+            return jive.extstreams.fetchCommentsOnActivity(activity, opts);
 
         }).then(function (response) {
             var commentsList = response.entity;

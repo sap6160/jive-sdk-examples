@@ -27,7 +27,14 @@ exports.route = function (req, res) {
 
         }).then(function () { //After creating 5 comments...
 
-            return jive.extstreams.fetchAllCommentsForExtstream(extstream, ['resources', 'content', 'type'], 10, 'JIVE');
+            var opts = {
+                "fieldList": ['resources', 'content', 'type'],
+                "itemsPerPage": 100,
+                "commentSourceType": "EXTERNAL",
+                "publishedAfter": new Date().getTime() - 100000 //should return some comments unless it took > 100 seconds!
+            };
+
+            return jive.extstreams.fetchAllCommentsForExtstream(extstream, opts);
 
         }).then(function (response) {
             var commentsList = response.entity;
