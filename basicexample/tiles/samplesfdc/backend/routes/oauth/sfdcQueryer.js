@@ -38,7 +38,7 @@ exports.handleSfdcQuery = function(req, res ) {
                 // fail
                 function(response) {
                     res.writeHead(response.statusCode, { 'Content-Type': 'application/json' });
-                    res.end(response['entity']);
+                    res.end(JSON.stringify(response['entity']));
                 }
             );
         }

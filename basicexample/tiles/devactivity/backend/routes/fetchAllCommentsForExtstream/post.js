@@ -29,7 +29,6 @@ exports.route = function (req, res) {
 
             var opts = {
                 "fieldList": ['resources', 'content', 'type'],
-                "itemsPerPage": 100,
                 "commentSourceType": "EXTERNAL",
                 "publishedAfter": new Date().getTime() - 100000 //should return some comments unless it took > 100 seconds!
             };
