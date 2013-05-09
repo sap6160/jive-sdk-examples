@@ -56,13 +56,17 @@ function convertToListTileData(opportunity) {
             "contents": [
 
                 {
-                    "text": "Stage Name: " + opportunity['StageName'],
+                    "text": util.format("Stage Name: %s", opportunity['StageName']),
                     "icon": "http://farm6.staticflickr.com/5106/5678094118_a78e6ff4e7.jpg",
                     "linkDescription": "Stage Name"
                 },
-
                 {
-                    "text": "Probability: " + opportunity['Probability'] + "%",
+                    "text": util.format("Type: %s", opportunity['Type']),
+                    "icon": "http://farm6.staticflickr.com/5106/5678094118_a78e6ff4e7.jpg",
+                    "linkDescription": "Type"
+                },
+                {
+                    "text": util.format("Probability: %s", opportunity['Probability']) + "%",
                     "icon": "http://farm6.staticflickr.com/5106/5678094118_a78e6ff4e7.jpg",
                     "linkDescription": "Close Date"
                 },
@@ -77,7 +81,7 @@ function convertToListTileData(opportunity) {
                     "linkDescription": "Expected Revenue"
                 },
                 {
-                    "text": "Close Date: " + opportunity['CloseDate'],
+                    "text": util.format("Close Date: %s", opportunity['CloseDate']),
                     "icon": "http://farm6.staticflickr.com/5106/5678094118_a78e6ff4e7.jpg",
                     "linkDescription": "Close Date"
                 }

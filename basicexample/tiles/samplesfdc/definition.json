@@ -8,6 +8,16 @@
                 "linkDescription": "Stage Name"
             },
             {
+                "text": "Type:",
+                "icon": "http://farm6.staticflickr.com/5106/5678094118_a78e6ff4e7.jpg",
+                "linkDescription": "Type"
+            },
+            {
+                "text": "Probability: 80%",
+                "icon": "http://farm6.staticflickr.com/5106/5678094118_a78e6ff4e7.jpg",
+                "linkDescription": "Close Date"
+            },
+            {
                 "text": "Amount: ",
                 "icon": "http://farm6.staticflickr.com/5106/5678094118_a78e6ff4e7.jpg",
                 "linkDescription": "Amount"
