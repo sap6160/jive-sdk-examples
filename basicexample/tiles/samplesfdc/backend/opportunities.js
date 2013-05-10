@@ -4,6 +4,7 @@ var jive = require("jive-sdk");
 var url = require('url');
 var util = require('util');
 var sampleOauth = require('./routes/oauth/sampleOauth');
+var sfdc_helpers = require(process.cwd() + '/helpers/sfdc_helpers');
 
 
 exports.pullOpportunity = pullOpportunity;
@@ -11,43 +12,18 @@ exports.pullOpportunity = pullOpportunity;
 function pullOpportunity(tileInstance){
 
     var opportunityID = tileInstance.config.opportunityID;
-    var uri = util.format("/services/data/v20.0/sobjects/Opportunity/%s", opportunityID);
-
+    var uri = util.format("/sobjects/Opportunity/%s", opportunityID);
     var ticketID = tileInstance.config.ticketID;
 
-    var tokenStore = sampleOauth.getTokenStore();
+    return sfdc_helpers.querySalesforceV27(ticketID, sampleOauth, uri).then(function(response) {
+        var opportunity = response['entity'];
+        return convertToListTileData(opportunity);
+    }).catch(function(err){
+        jive.logger.error('Error querying salesforce', err);
+    });
 
-    return tokenStore.find('tokens', {'ticket': ticketID }).then( function(found) {
-        if ( found ) {
-            var accessToken = found[0]['accessToken']['access_token'];
-            var host = found[0]['accessToken']['instance_url'];
-
-
-            var headers = {
-                'Authorization': 'Bearer ' + accessToken
-            };
-
-            return jive.util.buildRequest(host + uri, 'GET', null, headers);
-        }
-    }).then(
-        // success
-        function(response) {
-            return handleResponse(response);
-        },
-
-        // fail
-        function(response) {
-            return response;
-        }
-    );
 };
 
-function handleResponse(response) {
-    if (200 <= response.statusCode && response.statusCode <= 299 && response['entity']) {
-        return convertToListTileData(response['entity']);
-    }
-    return response;
-}
 
 function convertToListTileData(opportunity) {
     var dataToPush = {
@@ -84,6 +60,9 @@ function convertToListTileData(opportunity) {
                     "text": util.format("Close Date: %s", opportunity['CloseDate']),
                     "icon": "http://farm6.staticflickr.com/5106/5678094118_a78e6ff4e7.jpg",
                     "linkDescription": "Close Date"
+                },
+                {
+                    "text": new Date().toString().slice(0,40)
                 }
             ],
             "config": {

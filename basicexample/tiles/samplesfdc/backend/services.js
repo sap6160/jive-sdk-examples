@@ -7,8 +7,10 @@ exports.task = new jive.tasks.build(
         jive.tiles.findByDefinitionName( 'samplesfdc' ).then( function(instances) {
             if ( instances ) {
                 instances.forEach( function( instance ) {
-                    opportunities.pullOpportunity(instance).then(function(data){
-                        jive.tiles.pushData(instance, data);
+                        opportunities.pullOpportunity(instance).then(function(data){
+                            jive.tiles.pushData(instance, data);
+                    }).catch(function(err) {
+                        jive.logger.error('Error pushing salesforce data to Jive', err);
                     });
                 });
             }
