@@ -20,7 +20,13 @@ exports.task = new jive.tasks.build(
                         });
 
                     opportunities.pullComments(instance).then(function(comments) {
-                        console.log(comments);
+                        var proms = comments.map(function (comment) {
+                            var externalActivityID = comment['externalActivityID'];
+                            delete comment['externalActivityID'];
+                            return jive.extstreams.commentOnActivityByExternalID(instance, externalActivityID, comment);
+                        });
+
+                        return q.all(proms);
                     });
                 });
             }

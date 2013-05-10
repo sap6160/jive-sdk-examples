@@ -32,16 +32,16 @@ function pullActivity(extstreamInstance) {
             return convertToActivities(entity, lastDatePulled, extstreamInstance);
         });
 
-    }).catch(function(err) {
+    }).catch(function (err) {
             jive.logger.error('Error querying salesforce', err);
         });
 
 };
 
 function pullComments(extstreamInstance) {
-    return getLastDatePulled(extstreamInstance).then(function(lastDatePulled) {
+    return getLastDatePulled(extstreamInstance).then(function (lastDatePulled) {
         var opportunityID = extstreamInstance.config.opportunityID;
-        var query = util.format("SELECT Id, CommentType, CreatedDate, CreatedBy.Name, FeedItemId, IsDeleted, CommentBody" +
+        var query = util.format("SELECT Id, CommentType, CreatedDate, CreatedBy.Name, CreatedBy.Email, FeedItemId, IsDeleted, CommentBody" +
             " FROM FeedComment WHERE ParentId = '%s' AND CreatedDate > %s ORDER BY CreatedDate DESC",
             opportunityID,
             getDateString(lastDatePulled));
@@ -52,6 +52,8 @@ function pullComments(extstreamInstance) {
         return sfdc_helpers.querySalesforceV27(ticketID, sampleOauth, uri).then(function (response) {
             var entity = response['entity'];
             return convertToComments(entity, lastDatePulled, extstreamInstance);
+        }, function (err) {
+            jive.logger.error('Error converting comments', err);
         });
     });
 }
@@ -60,7 +62,7 @@ function pullComments(extstreamInstance) {
 function convertToActivities(entity, lastDatePulled, instance) {
     var records = entity['records'];
 
-    var activities = records.map(function(record) {
+    var activities = records.map(function (record) {
         var json = getActivityJSON(record);
 
         if (!isNaN(json['createdDate'])) {
@@ -75,7 +77,7 @@ function convertToActivities(entity, lastDatePulled, instance) {
 function convertToComments(entity, lastDatePulled, instance) {
     var records = entity['records'];
 
-    var comments = records.map(function(record) {
+    var comments = records.map(function (record) {
         var json = getCommentJSON(record);
 
         if (!isNaN(json['createdDate'])) {
@@ -127,26 +129,29 @@ function getCommentJSON(record) {
 
     var actor = record.CreatedBy && record.CreatedBy.Name || 'Anonymous';
     var firstLast = actor.split(' ');
-    var first = firstList[0], last = '';
+    var first = firstLast[0], last = '';
     if (firstLast.length >= 2) {
         last = firstLast[1];
     }
-    var body = record.Body || 'Empty post';
+    var email = record.CreatedBy && record.CreatedBy.Email || 'anonymous@example.com';
+    var body = record.CommentBody || 'Empty comment';
     var externalID = record.Id;
     var createdDate = new Date(record.CreatedDate).getTime();
 
     return {
         "createdDate": createdDate,
-        "jivecomment":  {
-            "author" : {
-              "name": {
-                  "givenName": first,
-                  "familyName": last
-              }
+        "jivecomment": {
+            "author": {
+                "name": {
+                    "givenName": first,
+                    "familyName": last
+                },
+                "email": email
             },
             "content": {"type": "text/html", "text": "<p>" + body + "</p>"},
             "type": "comment",
-            externalID: externalID
+            "externalID": externalID,
+            "externalActivityID": record.FeedItemId //Need this to use /extstreams/{id}/extactivities/{externalActivityID}/comments endpoint
         }
     }
 };
@@ -156,7 +161,7 @@ function getDateString(time) {
 }
 
 function getMetadataByInstance(instance) {
-    return metaDataStore.find(metaDataCollection, {'instanceID': instance['id']}).then(function(results) {
+    return metaDataStore.find(metaDataCollection, {'instanceID': instance['id']}).then(function (results) {
         if (results.length <= 0) {
             return null;
         }
@@ -178,7 +183,7 @@ function getLastDatePulled(instance) {
 }
 
 function updateLastDatePulled(instance, lastDatePulled) {
-    return getMetadataByInstance(instance).then(function(metadata){
+    return getMetadataByInstance(instance).then(function (metadata) {
         if (!metadata) {
             metadata = { "instanceID": instance['id'] };
         }
