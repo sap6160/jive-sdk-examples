@@ -8,26 +8,43 @@ exports.task = new jive.tasks.build(
         jive.extstreams.findByDefinitionName('sfdc_opportunity_activity').then(function (instances) {
             if (instances) {
                 instances.forEach(function (instance) {
+
                     opportunities.pullActivity(instance).then(function (data) {
-                        var proms = data.map(function (activity) {
-                            return jive.extstreams.pushActivity(instance, activity);
+                        var promise = q.resolve(1);
+                        data.forEach(function (activity) {
+                            delete activity['sfdcCreatedDate'];
+                            promise = promise.thenResolve(jive.extstreams.pushActivity(instance, activity));
                         });
 
-                        return q.all(proms);
-
-                    }).catch(function (err) {
-                            jive.logger.error('Error pushing salesforce activity to Jive', err);
+                        promise = promise.catch(function(err) {
+                            jive.logger.error('Error pushing activity to Jive', err);
                         });
 
-                    opportunities.pullComments(instance).then(function(comments) {
-                        var proms = comments.map(function (comment) {
-                            var externalActivityID = comment['externalActivityID'];
-                            delete comment['externalActivityID'];
-                            return jive.extstreams.commentOnActivityByExternalID(instance, externalActivityID, comment);
+                        return promise;
+
+                    }).then(function () {
+                            opportunities.pullComments(instance).then(function (comments) {
+                                var promise = q.resolve(1);
+                                comments.forEach(function (comment) {
+                                    delete comment['sfdcCreatedDate'];
+                                    var externalActivityID = comment['externalActivityID'];
+                                    delete comment['externalActivityID'];
+
+                                    promise = promise.thenResolve(jive.extstreams.commentOnActivityByExternalID(instance,
+                                        externalActivityID, comment));
+
+                                });
+
+                                promise = promise.catch(function(err) {
+                                    jive.logger.error('Error pushing comments to Jive', err);
+                                });
+
+                                return promise;
+                            });
+
                         });
 
-                        return q.all(proms);
-                    });
+
                 });
             }
         });

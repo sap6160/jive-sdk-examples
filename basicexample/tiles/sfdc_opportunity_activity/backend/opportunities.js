@@ -3,6 +3,7 @@ var url = require('url');
 var util = require('util');
 var sampleOauth = require('./routes/oauth/sampleOauth');
 var sfdc_helpers = require(process.cwd() + '/helpers/sfdc_helpers');
+var q = require('q');
 
 
 var metaDataCollection = "sfdcActivityMetadata";
@@ -16,18 +17,21 @@ exports.pullComments = pullComments;
 
 function pullActivity(extstreamInstance) {
 
-    return getLastDatePulled(extstreamInstance).then(function (lastDatePulled) {
+    return getLastDatePulled(extstreamInstance, 'activity').then(function (lastDatePulled) {
 
 
         var opportunityID = extstreamInstance.config.opportunityID;
-        var query = util.format("SELECT Id, Type, CreatedDate, CreatedBy.Name, Parent.Name, IsDeleted, Body FROM OpportunityFeed" +
-            " WHERE ParentId = '%s' AND Type = 'TextPost' AND CreatedDate > %s ORDER BY CreatedDate DESC",
-            opportunityID,
-            getDateString(lastDatePulled));
-        var uri = util.format("/query?q=%s", encodeURIComponent(query));
         var ticketID = extstreamInstance.config.ticketID;
 
-        return sfdc_helpers.querySalesforceV27(ticketID, sampleOauth, uri).then(function (response) {
+        //First query text posts
+        var queryTextPosts = util.format("SELECT Id, Type, CreatedDate, CreatedBy.Name, Parent.Name, IsDeleted, Body, (SELECT Id, FieldName, OldValue, NewValue" +
+            " FROM FeedTrackedChanges ) FROM OpportunityFeed" +
+            " WHERE ParentId = '%s' AND CreatedDate > %s ORDER BY CreatedDate ASC",
+            opportunityID,
+            getDateString(lastDatePulled));
+        var uri1 = util.format("/query?q=%s", encodeURIComponent(queryTextPosts));
+
+        return sfdc_helpers.querySalesforceV27(ticketID, sampleOauth, uri1).then(function (response) {
             var entity = response['entity'];
             return convertToActivities(entity, lastDatePulled, extstreamInstance);
         });
@@ -39,10 +43,10 @@ function pullActivity(extstreamInstance) {
 };
 
 function pullComments(extstreamInstance) {
-    return getLastDatePulled(extstreamInstance).then(function (lastDatePulled) {
+    return getLastDatePulled(extstreamInstance, 'comment').then(function (lastDatePulled) {
         var opportunityID = extstreamInstance.config.opportunityID;
         var query = util.format("SELECT Id, CommentType, CreatedDate, CreatedBy.Name, CreatedBy.Email, FeedItemId, IsDeleted, CommentBody" +
-            " FROM FeedComment WHERE ParentId = '%s' AND CreatedDate > %s ORDER BY CreatedDate DESC",
+            " FROM FeedComment WHERE ParentId = '%s' AND CreatedDate > %s ORDER BY CreatedDate ASC",
             opportunityID,
             getDateString(lastDatePulled));
 
@@ -65,13 +69,13 @@ function convertToActivities(entity, lastDatePulled, instance) {
     var activities = records.map(function (record) {
         var json = getActivityJSON(record);
 
-        if (!isNaN(json['createdDate'])) {
-            lastDatePulled = Math.max(lastDatePulled, json['createdDate']);
+        if (!isNaN(json['sfdcCreatedDate'])) {
+            lastDatePulled = Math.max(lastDatePulled, json['sfdcCreatedDate']);
         }
-        return json['jiveactivity'];
+        return json;
     });
 
-    return updateLastDatePulled(instance, lastDatePulled).thenResolve(activities);
+    return updateLastDatePulled(instance, lastDatePulled, 'activity').thenResolve(activities);
 }
 
 function convertToComments(entity, lastDatePulled, instance) {
@@ -80,14 +84,14 @@ function convertToComments(entity, lastDatePulled, instance) {
     var comments = records.map(function (record) {
         var json = getCommentJSON(record);
 
-        if (!isNaN(json['createdDate'])) {
-            lastDatePulled = Math.max(lastDatePulled, json['createdDate']);
+        if (!isNaN(json['sfdcCreatedDate'])) {
+            lastDatePulled = Math.max(lastDatePulled, json['sfdcCreatedDate']);
         }
 
-        return json['jivecomment'];
+        return json;
     });
 
-    return updateLastDatePulled(instance, lastDatePulled).thenResolve(comments);
+    return updateLastDatePulled(instance, lastDatePulled, 'comment').thenResolve(comments);
 
 }
 
@@ -95,32 +99,44 @@ function convertToComments(entity, lastDatePulled, instance) {
 function getActivityJSON(record) {
 
     var actor = record.CreatedBy && record.CreatedBy.Name || 'Anonymous';
-    var body = record.Body || 'Empty post';
     var oppName = record.Parent && record.Parent.Name || 'Some Opportunity';
     var externalID = record.Id;
     var createdDate = new Date(record.CreatedDate).getTime();
 
+    var body = null;
+    if (record.Type == 'TextPost') {
+        body = record.Body;
+    }
+    else if (record.Type == 'TrackedChange') {
+        var changes = record.FeedTrackedChanges && record.FeedTrackedChanges.records;
+        if (changes && changes.length > 0) {
+            var lastChange = changes[changes.length - 1];
+            body = actor + ' changed ' + lastChange.FieldName.replace('Opportunity\.', '') + ' from '
+                + lastChange.OldValue + ' to ' + lastChange.NewValue + '.';
+        }
+    }
+
+    body = body || 'Empty post';
+
     return {
-        "createdDate": createdDate,
-        "jiveactivity": {
-            "activity": {
-                "action": {
-                    "name": "posted",
-                    "description": body
-                },
-                "actor": {
-                    "name": actor,
-                    "email": "actor@email.com"
-                },
-                "object": {
-                    "type": "website",
-                    "url": "http://www.salesforce.com",
-                    "image": "http://farm6.staticflickr.com/5106/5678094118_a78e6ff4e7.jpg",
-                    "title": oppName,
-                    "description": body
-                },
-                "externalID": externalID
-            }
+        "sfdcCreatedDate": createdDate,
+        "activity": {
+            "action": {
+                "name": "posted",
+                "description": body
+            },
+            "actor": {
+                "name": actor,
+                "email": "actor@email.com"
+            },
+            "object": {
+                "type": "website",
+                "url": "http://www.salesforce.com",
+                "image": "http://farm6.staticflickr.com/5106/5678094118_a78e6ff4e7.jpg",
+                "title": oppName,
+                "description": body
+            },
+            "externalID": externalID
         }
     }
 };
@@ -139,20 +155,18 @@ function getCommentJSON(record) {
     var createdDate = new Date(record.CreatedDate).getTime();
 
     return {
-        "createdDate": createdDate,
-        "jivecomment": {
-            "author": {
-                "name": {
-                    "givenName": first,
-                    "familyName": last
-                },
-                "email": email
+        "sfdcCreatedDate": createdDate,
+        "author": {
+            "name": {
+                "givenName": first,
+                "familyName": last
             },
-            "content": {"type": "text/html", "text": "<p>" + body + "</p>"},
-            "type": "comment",
-            "externalID": externalID,
-            "externalActivityID": record.FeedItemId //Need this to use /extstreams/{id}/extactivities/{externalActivityID}/comments endpoint
-        }
+            "email": email
+        },
+        "content": {"type": "text/html", "text": "<p>" + body + "</p>"},
+        "type": "comment",
+        "externalID": externalID,
+        "externalActivityID": record.FeedItemId //Need this to use /extstreams/{id}/extactivities/{externalActivityID}/comments endpoint
     }
 };
 
@@ -169,30 +183,41 @@ function getMetadataByInstance(instance) {
     });
 }
 
-function getLastDatePulled(instance) {
+function getLastDatePulled(instance, type) {
     return getMetadataByInstance(instance).then(function (metadata) {
 
-        var lastDatePulled = metadata && metadata.lastDatePulled;
+        var lastDatePulled = metadata && metadata.lastDatePulled && metadata.lastDatePulled[type];
 
         if (!lastDatePulled) {
-            lastDatePulled = new Date().getTime();
-            return updateLastDatePulled(instance, lastDatePulled).thenResolve(lastDatePulled);
+            lastDatePulled = 1; //start date as 1 ms after the epoch, so that instance pulls all existing data for an opportunity
+            return updateLastDatePulled(instance, lastDatePulled, type).thenResolve(lastDatePulled);
         }
         return lastDatePulled;
     });
 }
 
-function updateLastDatePulled(instance, lastDatePulled) {
+function updateLastDatePulled(instance, lastDatePulled, type) {
     return getMetadataByInstance(instance).then(function (metadata) {
+        var changed = false;
         if (!metadata) {
             metadata = { "instanceID": instance['id'] };
         }
         if (!metadata.lastDatePulled) {
-            metadata.lastDatePulled = lastDatePulled;
+            metadata.lastDatePulled = {};
+        }
+        if (!metadata.lastDatePulled[type]) {
+            metadata.lastDatePulled[type] = lastDatePulled;
+            changed = true;
         }
         else {
-            metadata.lastDatePulled = Math.max(lastDatePulled, metadata.lastDatePulled);
+            if (metadata.lastDatePulled[type] < lastDatePulled) {
+                changed = true;
+                metadata.lastDatePulled[type] = lastDatePulled;
+            }
         }
-        return metaDataStore.save(metaDataCollection, instance['id'], metadata);
+        if (changed) {
+            return metaDataStore.save(metaDataCollection, instance['id'], metadata);
+        }
+        return metadata;
     });
 }
