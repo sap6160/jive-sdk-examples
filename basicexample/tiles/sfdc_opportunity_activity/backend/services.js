@@ -1,4 +1,5 @@
 var opportunities = require('./opportunities'),
+    jive_to_sf_syncing = require('./jive_to_sf_syncing'),
     jive = require('jive-sdk'),
     q = require('q');
 
@@ -42,6 +43,8 @@ exports.task = new jive.tasks.build(
                                 return promise;
                             });
 
+                        }).then(function() {
+                            return jive_to_sf_syncing.jiveCommentsToSalesforce(instance);
                         });
 
 

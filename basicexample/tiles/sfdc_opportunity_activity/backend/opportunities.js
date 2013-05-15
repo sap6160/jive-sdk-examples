@@ -5,20 +5,19 @@ var sampleOauth = require('./routes/oauth/sampleOauth');
 var sfdc_helpers = require(process.cwd() + '/helpers/sfdc_helpers');
 var q = require('q');
 
-
-var metaDataCollection = "sfdcActivityMetadata";
-exports.metaDataCollection = function () {
-    return metaDataCollection;
-};
-var metaDataStore = jive.service.persistence();
+var metadataCollection = "sfdcActivityMetadata";
+var metadataStore = jive.service.persistence();
 
 exports.pullActivity = pullActivity;
 exports.pullComments = pullComments;
+exports.getLastTimePulled = getLastTimePulled;
+exports.updateLastTimePulled = updateLastTimePulled;
+exports.recordSyncFromJive = recordSyncFromJive;
+exports.getMetadataByInstance = getMetadataByInstance;
 
 function pullActivity(extstreamInstance) {
 
-    return getLastDatePulled(extstreamInstance, 'activity').then(function (lastDatePulled) {
-
+    return getLastTimePulled(extstreamInstance, 'activity').then(function (lastTimePulled) {
 
         var opportunityID = extstreamInstance.config.opportunityID;
         var ticketID = extstreamInstance.config.ticketID;
@@ -28,12 +27,12 @@ function pullActivity(extstreamInstance) {
             " FROM FeedTrackedChanges ) FROM OpportunityFeed" +
             " WHERE ParentId = '%s' AND CreatedDate > %s ORDER BY CreatedDate ASC",
             opportunityID,
-            getDateString(lastDatePulled));
+            getDateString(lastTimePulled));
         var uri1 = util.format("/query?q=%s", encodeURIComponent(queryTextPosts));
 
         return sfdc_helpers.querySalesforceV27(ticketID, sampleOauth, uri1).then(function (response) {
             var entity = response['entity'];
-            return convertToActivities(entity, lastDatePulled, extstreamInstance);
+            return convertToActivities(entity, lastTimePulled, extstreamInstance);
         });
 
     }).catch(function (err) {
@@ -43,58 +42,67 @@ function pullActivity(extstreamInstance) {
 };
 
 function pullComments(extstreamInstance) {
-    return getLastDatePulled(extstreamInstance, 'comment').then(function (lastDatePulled) {
+    return getLastTimePulled(extstreamInstance, 'comment').then(function (lastTimePulled) {
         var opportunityID = extstreamInstance.config.opportunityID;
         var query = util.format("SELECT Id, CommentType, CreatedDate, CreatedBy.Name, CreatedBy.Email, FeedItemId, IsDeleted, CommentBody" +
             " FROM FeedComment WHERE ParentId = '%s' AND CreatedDate > %s ORDER BY CreatedDate ASC",
             opportunityID,
-            getDateString(lastDatePulled));
+            getDateString(lastTimePulled));
 
         var uri = util.format("/query?q=%s", encodeURIComponent(query));
         var ticketID = extstreamInstance.config.ticketID;
 
         return sfdc_helpers.querySalesforceV27(ticketID, sampleOauth, uri).then(function (response) {
             var entity = response['entity'];
-            return convertToComments(entity, lastDatePulled, extstreamInstance);
+            return convertToComments(entity, lastTimePulled, extstreamInstance);
         }, function (err) {
             jive.logger.error('Error converting comments', err);
         });
     });
 }
 
-
-function convertToActivities(entity, lastDatePulled, instance) {
+function convertToActivities(entity, lastTimePulled, instance) {
     var records = entity['records'];
 
     var activities = records.map(function (record) {
         var json = getActivityJSON(record);
 
         if (!isNaN(json['sfdcCreatedDate'])) {
-            lastDatePulled = Math.max(lastDatePulled, json['sfdcCreatedDate']);
+            lastTimePulled = Math.max(lastTimePulled, json['sfdcCreatedDate']);
         }
         return json;
     });
 
-    return updateLastDatePulled(instance, lastDatePulled, 'activity').thenResolve(activities);
+    return updateLastTimePulled(instance, lastTimePulled, 'activity').thenResolve(activities);
 }
 
-function convertToComments(entity, lastDatePulled, instance) {
+function convertToComments(entity, lastTimePulled, instance) {
     var records = entity['records'];
+    var comments = [];
+    var promise = q.resolve(null);
 
-    var comments = records.map(function (record) {
-        var json = getCommentJSON(record);
+    records.forEach(function (record) {
 
-        if (!isNaN(json['sfdcCreatedDate'])) {
-            lastDatePulled = Math.max(lastDatePulled, json['sfdcCreatedDate']);
-        }
+        var sfCommentID = record['Id'];
+        promise = promise.thenResolve(
+            wasSynced(instance, sfCommentID).then(function (wasItSynced) {
+                if (wasItSynced) {
+                    return;
+                }
+                var json = getCommentJSON(record);
 
-        return json;
+                if (!isNaN(json['sfdcCreatedDate'])) {
+                    lastTimePulled = Math.max(lastTimePulled, json['sfdcCreatedDate']);
+                }
+
+                comments.push(json);
+            }));
     });
 
-    return updateLastDatePulled(instance, lastDatePulled, 'comment').thenResolve(comments);
-
+    return promise.then(function() {
+        return updateLastTimePulled(instance, lastTimePulled, 'comment').thenResolve(comments);
+    });
 }
-
 
 function getActivityJSON(record) {
 
@@ -175,7 +183,7 @@ function getDateString(time) {
 }
 
 function getMetadataByInstance(instance) {
-    return metaDataStore.find(metaDataCollection, {'instanceID': instance['id']}).then(function (results) {
+    return metadataStore.find(metadataCollection, {'instanceID': instance['id']}).then(function (results) {
         if (results.length <= 0) {
             return null;
         }
@@ -183,41 +191,71 @@ function getMetadataByInstance(instance) {
     });
 }
 
-function getLastDatePulled(instance, type) {
+function getLastTimePulled(instance, type) {
     return getMetadataByInstance(instance).then(function (metadata) {
 
-        var lastDatePulled = metadata && metadata.lastDatePulled && metadata.lastDatePulled[type];
+        var lastTimePulled = metadata && metadata.lastTimePulled && metadata.lastTimePulled[type];
 
-        if (!lastDatePulled) {
-            lastDatePulled = 1; //start date as 1 ms after the epoch, so that instance pulls all existing data for an opportunity
-            return updateLastDatePulled(instance, lastDatePulled, type).thenResolve(lastDatePulled);
+        if (!lastTimePulled) {
+            lastTimePulled = 1; //start date as 1 ms after the epoch, so that instance pulls all existing data for an opportunity
+            return updateLastTimePulled(instance, lastTimePulled, type).thenResolve(lastTimePulled);
         }
-        return lastDatePulled;
+        return lastTimePulled;
     });
 }
 
-function updateLastDatePulled(instance, lastDatePulled, type) {
+function updateLastTimePulled(instance, lastTimePulled, type) {
     return getMetadataByInstance(instance).then(function (metadata) {
         var changed = false;
         if (!metadata) {
             metadata = { "instanceID": instance['id'] };
         }
-        if (!metadata.lastDatePulled) {
-            metadata.lastDatePulled = {};
+        if (!metadata.lastTimePulled) {
+            metadata.lastTimePulled = {};
         }
-        if (!metadata.lastDatePulled[type]) {
-            metadata.lastDatePulled[type] = lastDatePulled;
+        if (!metadata.lastTimePulled[type]) {
+            metadata.lastTimePulled[type] = lastTimePulled;
             changed = true;
         }
         else {
-            if (metadata.lastDatePulled[type] < lastDatePulled) {
+            if (metadata.lastTimePulled[type] < lastTimePulled) {
                 changed = true;
-                metadata.lastDatePulled[type] = lastDatePulled;
+                metadata.lastTimePulled[type] = lastTimePulled;
             }
         }
         if (changed) {
-            return metaDataStore.save(metaDataCollection, instance['id'], metadata);
+            return metadataStore.save(metadataCollection, instance['id'], metadata);
         }
         return metadata;
+    });
+}
+
+function recordSyncFromJive(instance, sfCommentID) {
+    return getMetadataByInstance(instance).then(function (metadata) {
+        if (!metadata) {
+            metadata = {"instanceID": instance['id'], "syncs": []};
+        }
+        if (!metadata.syncs) {
+            metadata.syncs = [];
+        }
+        var changed = false;
+        if (metadata.syncs.indexOf(sfCommentID) < 0) {
+            metadata.syncs.push(sfCommentID);
+            changed = true;
+        }
+        if (changed) {
+            return metadataStore.save(metadataCollection, instance['id'], metadata);
+        }
+        return metadata;
+    });
+}
+
+function wasSynced(instance, sfCommentID) {
+    return getMetadataByInstance(instance).then(function (metadata) {
+        if (metadata && metadata.syncs && metadata.syncs.indexOf(sfCommentID) >= 0) {
+            return true;
+        }
+        return false;
+
     });
 }
